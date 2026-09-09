@@ -1,13 +1,13 @@
 <script setup>
   import { ref } from 'vue';
-  import SideNavComponent from './components/SideNavComponent.vue';
+  import SideNavComponent from './components/utilities/SideNavComponent.vue';
   const showSideNav = ref(true);
   const toggleSideNav = () => showSideNav.value = !showSideNav.value;
 </script>
 
 <template>
   <main
-    class="min-w-dvw min-h-dvh grid bg-gray-300"
+    class="w-dvw h-dvh grid bg-gray-300"
     :class="showSideNav ? 'grid-cols-[300px_1fr]' : 'grid-cols-1'"
   >
     <SideNavComponent v-if="showSideNav"/>
