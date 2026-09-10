@@ -25,8 +25,26 @@ export const eStoreData = defineStore('e-store-data', {
 
       const result = await response.json();
       result.status !== 200 ? this.errors = result.errors : this.categories = result.data
+    },
+
+    async deleteCategory(id) {
+
+      const response = await fetch(`${this.apiURI}/categories/delete`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-API-KEY': this.apiKEY
+        },
+        body: JSON.stringify({ id: id })
+      });
+
+      const result = await response.json();
+
+      if (result) this.getAllCategories();
+
     }
 
-  }
+
+  },
 
 });

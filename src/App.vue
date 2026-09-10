@@ -1,6 +1,7 @@
 <script setup>
   import { ref } from 'vue';
   import SideNavComponent from './components/utilities/SideNavComponent.vue';
+
   const showSideNav = ref(true);
   const toggleSideNav = () => showSideNav.value = !showSideNav.value;
 </script>
@@ -11,7 +12,7 @@
     :class="showSideNav ? 'grid-cols-[300px_1fr]' : 'grid-cols-1'"
   >
     <SideNavComponent v-if="showSideNav"/>
-    <section class="w-full h-screen overflow-scroll p-4" @click="toggleSideNav">
+    <section class="w-full h-screen overflow-scroll p-4">
       <RouterView/>
     </section>
   </main>
