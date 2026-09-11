@@ -1,5 +1,4 @@
 <script setup>
-  import AddModalComponent from '@/components/categories/AddModalComponent.vue';
   import CategoriesTableComponent from '@/components/categories/CategoriesTableComponent.vue';
 </script>
 
