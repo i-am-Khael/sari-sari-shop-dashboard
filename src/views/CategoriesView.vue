@@ -5,7 +5,6 @@
 
 <template>
   <div class="w-auto h-full flex flex-col gap-5">
-    <AddModalComponent/>
     <CategoriesTableComponent/>
   </div>
 </template>
