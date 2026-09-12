@@ -10,7 +10,7 @@ const search = ref('');
 const sortField = ref(null);
 const sortDirection = ref('asc');
 const currentPage = ref(1);
-const itemsPerPage = ref(5);
+const itemsPerPage = ref(10);
 const itemsPerPageOptions = [5, 10, 25, 50];
 
 
@@ -89,7 +89,6 @@ onMounted(async () => {
 </script>
 
 <template>
-
   <div class="w-full p-5 flex flex-col gap-4 rounded bg-linear-to-r from-blue-950 to-blue-800 sm:flex-row sm:items-center sm:justify-between">
     <div>
       <p class="mb-1 text-xs font-semibold uppercase tracking-widest text-blue-200">
@@ -112,12 +111,28 @@ onMounted(async () => {
     </button>
   </div>
 
+  <div class="w-full px-6 py-4 flex items-center justify-between rounded border border-slate-200 bg-white">
+    <label for="search" class="w-full text-sm font-semibold text-slate-700">
+      Search Categories
+    </label>
+    <div class="w-full relative">
+      <FontAwesomeIcon icon="fa-solid fa-magnifying-glass" class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"/>
+      <input
+        id="search"
+        type="text"
+        placeholder="Search Categories..."
+        class="w-full py-2 pl-10 pr-4 text-sm text-slate-700 outline-none rounded border focus:border-blue-500 border-slate-300 bg-white"
+        v-model="search"
+      >
+    </div>
+  </div>
+
   <div class="overflow-scroll rounded-md border border-slate-200 bg-white">
     <div class="overflow-x-auto">
 
-      <table class="w-full">
+      <table class="w-full h-full overflow-scroll">
 
-        <thead class="sticky top-0 bg-linear-to-r from-blue-950 to-blue-800">
+        <thead class="bg-linear-to-r from-blue-950 to-blue-800">
           <tr class="text-left text-sm uppercase tracking-wider text-white">
             <th
               class="px-6 py-4 font-semibold cursor-pointer hover:bg-blue-700"
@@ -157,14 +172,14 @@ onMounted(async () => {
               >
                 Edit
               </button>
-              <button
+              <!-- <button
                 type="button"
                 disabled
                 class="px-4 py-2 cursor-pointer rounded text-sm font-medium text-white bg-red-400 hover:bg-red-600 disabled:cursor-not-allowed disabled:opacity-40"
                 @click="deleteCategory(category.id)"
               >
                 Delete
-              </button>
+              </button> -->
             </td>
           </tr>
         </tbody>
@@ -225,6 +240,6 @@ onMounted(async () => {
       </div>
 
 
-    </div>
+     </div>
   </div>
 </template>
