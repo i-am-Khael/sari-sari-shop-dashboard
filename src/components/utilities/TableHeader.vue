@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
 const props = defineProps({
@@ -15,12 +15,26 @@ const props = defineProps({
     type: String,
     required: true
   },
-  placehoder: {
+  placeholder: {
     type: String,
-    required: true
+    default: 'Search...'
   }
 });
+
+const emit = defineEmits([
+  'search',
+  'openModal'
+]);
+
 const search = ref('');
+
+const openModal = () => {
+  emit('openModal');
+}
+
+watch(search, (value) => {
+  emit('search', value);
+});
 </script>
 
 <template>
@@ -39,15 +53,17 @@ const search = ref('');
           id="search"
           type="text"
           class="w-full py-2 pl-10 pr-4 text-sm rounded  bg-slate-50"
-          :placeholder="props.placehoder"
+          :placeholder="props.placeholder"
           v-model="search"
         >
       </div>
       <button
         type="button"
-        class="px-6 py-2.5 text-sm font-semibold uppercase inline-flex items-center justify-center gap-2 rounded shadow-sm text-blue-950 bg-blue-50 hover:bg-blue-900 hover:text-slate-50 cursor-pointer"
+        class="px-6 py-2.5 text-sm font-semibold inline-flex items-center justify-center gap-2 rounded shadow-sm text-blue-950 bg-blue-50 hover:bg-blue-900 hover:text-slate-50 cursor-pointer"
+        @click="openModal"
       >
-        Add
+        <FontAwesomeIcon icon="fa-solid fa-plus"/>
+        <span>Add Category</span>
       </button>
     </div>
 

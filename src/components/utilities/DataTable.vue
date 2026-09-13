@@ -61,7 +61,7 @@ const props = defineProps({
 						v-for="column in props.columns"
 						:key="column.key"
 						:class="column.columnClass"
-						class="p-4"
+						class="px-3"
 					>
 					  <slot
 							:name="column.key"
