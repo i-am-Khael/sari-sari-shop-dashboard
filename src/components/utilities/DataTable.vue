@@ -1,4 +1,6 @@
 <script setup>
+import Button from './Button.vue';
+
 const props = defineProps({
   columns: {
     type: Array,
@@ -11,14 +13,36 @@ const props = defineProps({
   rowKey: {
     type: String,
     default: 'id'
+  },
+  sortKey: {
+    type: String,
+    default: ''
+  },
+  sortDirection: {
+    type: String,
+    default: 'asc',
+    validator: (value) => ['asc', 'desc'].includes(value)
   }
 });
+
+const emit = defineEmits(['sort']);
+
+const handleSort = (column) => {
+  if (!column.sortable) return;
+  const direction = props.sortKey === column.key && props.sortDirection === 'asc' ? 'desc' : 'asc'
+  emit('sort', { key: column.key, direction });
+}
+
+const setSortIcon = (column) => {
+  if (props.sortKey !== column.key) return 'fa-solid fa-sort';
+  return props.sortDirection === 'asc' ? 'fa-solid fa-sort-up' : 'fa-solid fa-sort-down';
+}
 </script>
 
 <template>
 	<div class="w-full rounded overflow-scroll">
 
-	  <slot v-if="$slots.header" name="header" />
+	  <slot v-if="$slots.header" name="header"/>
 
 		<table class="w-full overflow-x-scroll bg-slate-50">
 		  <thead class="bg-linear-to-r from-blue-950 to-blue-800">
@@ -33,7 +57,15 @@ const props = defineProps({
 							:name="`header-${column.key}`"
 							:column="column"
 						>
-						  {{ column.label }}
+						  <Button
+								v-if="column.sortable"
+								customClass="w-full uppercase text-left flex items-center cursor-pointer gap-1.5"
+								:label="column.label"
+								:sortIcon="true"
+								:iconName="setSortIcon(column)"
+								@click="handleSort(column)"
+							/>
+							<span v-else>{{ column.label }}</span>
 						</slot>
 					</th>
 				  <th
@@ -94,7 +126,7 @@ const props = defineProps({
 			</tbody>
 		</table>
 
-		<slot name="pagination" />
+		<slot v-if="$slots.pagination" name="pagination"/>
 
 	</div>
 </template>

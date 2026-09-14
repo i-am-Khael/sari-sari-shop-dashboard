@@ -1,4 +1,3 @@
-import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
 
 export const eStoreData = defineStore('e-store-data', {
@@ -14,7 +13,8 @@ export const eStoreData = defineStore('e-store-data', {
     categoriesColumn: [
       {
         'key': 'category',
-        'label': 'Category'
+        'label': 'Category',
+        'sortable': true
       },
       {
         'key': 'category_desc',
@@ -42,6 +42,20 @@ export const eStoreData = defineStore('e-store-data', {
 
       const response = await fetch(`${this.apiURI}/categories/add`, {
         method: 'POST',
+        headers: this.headers,
+        body: JSON.stringify(data)
+      });
+
+      const result = await response.json();
+
+      if (result) this.getAllCategories();
+
+    },
+
+    async editCategory(data) {
+
+      const response = await fetch(`${this.apiURI}/categories/update`, {
+        method: 'PATCH',
         headers: this.headers,
         body: JSON.stringify(data)
       });

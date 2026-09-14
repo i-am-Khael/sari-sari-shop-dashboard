@@ -3,7 +3,7 @@
 </script>
 
 <template>
-  <aside class="w-72 h-screen px-4 py-6 flex flex-col shrink-0 bg-linear-to-b from-blue-950 via-blue-900 to-blue-800 text-white shadow-xl">
+  <aside class="h-screen px-4 py-6 flex flex-col shrink-0 bg-linear-to-b from-blue-950 via-blue-900 to-blue-800 text-white shadow-xl">
 
     <div class="mb-8 px-2 pb-6 border-b border-blue-800/70">
       <div class="flex items-center gap-3">

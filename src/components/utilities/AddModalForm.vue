@@ -1,9 +1,8 @@
  <script setup>
-import { ref } from 'vue';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
 const props = defineProps({
-  cancel: Boolean,
+  cancelButton: Boolean,
   default: false
 });
 
@@ -49,7 +48,7 @@ const handleOverlay = (event) => {
           <slot name="buttons"/>
             <button
               class="w-full p-2 text-slate-50 rounded bg-red-400 hover:bg-red-500 cursor-pointer"
-              v-if="props.cancel"
+              v-if="props.cancelButton"
               @click="closeModal"
             >
               Cancel

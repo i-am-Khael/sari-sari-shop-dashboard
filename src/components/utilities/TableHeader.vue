@@ -1,6 +1,8 @@
 <script setup>
 import { ref, watch } from 'vue';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import Button from './Button.vue';
+import InputText from './InputText.vue';
 
 const props = defineProps({
   headerText: {
@@ -49,22 +51,21 @@ watch(search, (value) => {
 		<div class="flex items-center gap-3">
       <div class="relative">
         <FontAwesomeIcon icon="fa-solid fa-magnifying-glass" class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-500"/>
-        <input
+        <InputText
           id="search"
           type="text"
-          class="w-full py-2 pl-10 pr-4 text-sm rounded  bg-slate-50"
+          inputClass="w-full py-2 pl-10 pr-4 text-sm rounded  bg-slate-50"
           :placeholder="props.placeholder"
           v-model="search"
-        >
+        />
       </div>
-      <button
-        type="button"
-        class="px-6 py-2.5 text-sm font-semibold inline-flex items-center justify-center gap-2 rounded shadow-sm text-blue-950 bg-blue-50 hover:bg-blue-900 hover:text-slate-50 cursor-pointer"
+      <Button
+        customClass="px-6 py-2.5 text-sm font-semibold inline-flex items-center justify-center gap-2 rounded shadow-sm text-blue-950 bg-blue-50 hover:bg-blue-900 hover:text-slate-50 cursor-pointer"
+        label="Add Category"
+        iconName="fa-solid fa-plus"
+        :buttonIcon="true"
         @click="openModal"
-      >
-        <FontAwesomeIcon icon="fa-solid fa-plus"/>
-        <span>Add Category</span>
-      </button>
+      />
     </div>
 
 	</div>

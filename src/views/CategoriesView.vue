@@ -2,22 +2,27 @@
 import { ref, computed, onMounted } from 'vue';
 import { storeToRefs } from 'pinia';
 import { eStoreData } from '@/stores/eStoreData';
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import DataTable from '@/components/utilities/DataTable.vue';
 import TableHeader from '@/components/utilities/TableHeader.vue';
 import Pagination from '@/components/utilities/Pagination.vue';
 import AddModalForm from '@/components/utilities/AddModalForm.vue';
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import InputText from '@/components/utilities/InputText.vue';
+import Button from '@/components/utilities/Button.vue';
 
 const store = eStoreData();
+const { categories } = storeToRefs(store);
+const categoryId = ref('');
+const category = ref('');
+const description = ref('');
 const columns = store.categoriesColumn;
 const search = ref('');
 const currentPage = ref(1);
 const itemsPerPage = ref(10);
 const showAddModal = ref(false);
-
-const { categories } = storeToRefs(store);
-const category = ref('');
-const description = ref('');
+const sortKey = ref('');
+const sortDirection = ref('asc');
+const edit = ref(false);
 
 const filteredCategories = computed(() => {
   const query = search.value.trim().toLowerCase();
@@ -35,14 +40,33 @@ const filteredCategories = computed(() => {
   });
 });
 
+const sortedCategories = computed(() => {
+  const data = [...filteredCategories.value];
+  if (!sortKey.value) return data;
+
+  return data.sort((a, b) => {
+    const first = String(a[sortKey.value] ?? '').toLowerCase();
+    const second = String(b[sortKey.value] ?? '').toLowerCase();
+    const comparison = first.localeCompare(second, undefined, { numeric: true, sensitivity: 'base' });
+
+    return sortDirection.value === 'asc' ? comparison : -comparison;
+  })
+});
+
 const paginatedCategories = computed(() => {
   const start = (currentPage.value - 1) * itemsPerPage.value;
   const end = start + itemsPerPage.value;
-  return filteredCategories.value.slice(start, end);
+  return sortedCategories.value.slice(start, end);
 });
 
 const handleSearch = (value) => {
   search.value = value;
+  currentPage.value = 1;
+}
+
+const handleSort = ({ key, direction }) => {
+  sortKey.value = key;
+  sortDirection.value = direction;
   currentPage.value = 1;
 }
 
@@ -60,6 +84,13 @@ const openAddModal = () => {
   showAddModal.value = true;
 }
 
+const editModal = (data) => {
+  showAddModal.value = true;
+  categoryId.value = data.id;
+  category.value = data.category;
+  description.value = data.category_desc;
+}
+
 const closeAddModal = () => {
   showAddModal.value = false;
 }
@@ -69,6 +100,16 @@ const addCategory = async () => {
     'category': category.value,
     'description': description.value
   });
+}
+
+const editCategory = async () => {
+  const details = {
+    'id': categoryId.value,
+    'category': category.value,
+    'description': description.value
+  }
+
+  await store.editCategory(details);
 }
 
 onMounted(async () => {
@@ -81,6 +122,9 @@ onMounted(async () => {
   <DataTable
     :columns="columns"
     :rows="paginatedCategories"
+    :sortKey="sortKey"
+    :sortDirection="sortDirection"
+    @sort="handleSort"
   >
 
      <template #header>
@@ -100,6 +144,7 @@ onMounted(async () => {
           type="button"
           aria-label="Edit a category."
           class="text-blue-500 hover:text-blue-800 cursor-pointer"
+           @click="editModal(row)"
         >
           <FontAwesomeIcon icon="fa-solid fa-pen-to-square" class="text-xl"/>
         </button>
@@ -108,7 +153,7 @@ onMounted(async () => {
 
     <template #pagination>
       <Pagination
-        :totalItems="filteredCategories.length"
+        :totalItems="sortedCategories.length"
         @pageChange="handlePageChange"
         @itemsPerPageChange="handleItemsPerPageChange"
       />
@@ -118,40 +163,38 @@ onMounted(async () => {
 
   <AddModalForm
     v-if="showAddModal"
+    :cancelButton="true"
     @close="closeAddModal"
-    cancel="true"
   >
     <template #input>
-      <div class="flex flex-col gap-1.5">
-        <label for="category" class="text-sm font-semibold text-slate-700">Category</label>
-        <input
-          id="category"
-          type="text"
-          placeholder="Category"
-          required
-          class="w-full px-3 py-2.5 text-sm text-slate-800 rounded outline-none border border-slate-300 placeholder:text-slate-400 focus:border-blue-600"
-          v-model="category"
-        >
-      </div>
-      <div class="flex flex-col gap-1.5">
-        <label for="description" class="text-sm font-semibold text-slate-700">Description</label>
-        <textarea
-          id="description"
-          placeholder="Description"
-          required
-          class="w-full px-3 py-2.5 text-sm text-slate-800 resize-none outline-none rounded border border-slate-300 bg-slate-50 placeholder:text-slate-400 focus:border-blue-600"
-          v-model="description"
-        >
-        </textarea>
-      </div>
+      <InputText
+        id="category"
+        type="text"
+        label="Category"
+        placeholder="Category"
+        v-model="category"
+      />
+      <InputText
+        id="description"
+        type="textarea"
+        label="Description"
+        placeholder="Description"
+        v-model="description"
+      />
     </template>
     <template #buttons>
-      <button
-        class="w-full p-2 text-slate-50 rounded bg-blue-800 hover:bg-blue-700 cursor-pointer"
+      <Button
+        v-if="!categoryId"
+        customClass="w-full p-2 text-slate-50 rounded bg-blue-800 hover:bg-blue-700 cursor-pointer"
+        label="Add"
         @click="addCategory"
-      >
-        Add
-      </button>
+      />
+      <Button
+        v-else
+        customClass="w-full p-2 text-slate-50 rounded bg-blue-800 hover:bg-blue-700 cursor-pointer"
+        label="Update"
+        @click="editCategory"
+      />
     </template>
   </AddModalForm>
 
