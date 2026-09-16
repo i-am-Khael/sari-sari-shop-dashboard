@@ -1,84 +1,39 @@
 <script setup>
-import { ref, computed, onMounted } from 'vue';
+import { ref, onMounted } from 'vue';
 import { storeToRefs } from 'pinia';
-import { eStoreData } from '@/stores/eStoreData';
+import { useCategoriesStore } from '@/stores/categories';
+import { useDataTable } from '@/composables/useDataTable';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import DataTable from '@/components/utilities/DataTable.vue';
 import TableHeader from '@/components/utilities/TableHeader.vue';
+import DataTable from '@/components/utilities/DataTable.vue';
 import Pagination from '@/components/utilities/Pagination.vue';
-import AddModalForm from '@/components/utilities/AddModalForm.vue';
+import FormModal from '@/components/utilities/FormModal.vue';
 import InputText from '@/components/utilities/InputText.vue';
 import Button from '@/components/utilities/Button.vue';
 
-const store = eStoreData();
-const { categories } = storeToRefs(store);
+const store = useCategoriesStore();
+const { categories, errors } = storeToRefs(store);
 const categoryId = ref('');
 const category = ref('');
 const description = ref('');
-const columns = store.categoriesColumn;
-const search = ref('');
-const currentPage = ref(1);
-const itemsPerPage = ref(10);
+const columns = store.columns;
 const showAddModal = ref(false);
-const sortKey = ref('');
-const sortDirection = ref('asc');
-const edit = ref(false);
 
-const filteredCategories = computed(() => {
-  const query = search.value.trim().toLowerCase();
-  if (!query) return categories.value;
-
-  return categories.value.filter((category) => {
-    return (
-      String(category.category ?? '')
-        .toLowerCase()
-        .includes(query) ||
-      String(category.category_desc ?? '')
-        .toLowerCase()
-        .includes(query)
-    );
-  });
+const {
+  currentPage,
+  itemsPerPage,
+  sortKey,
+  sortDirection,
+  sortedItems,
+  paginatedItems,
+  handleSearch,
+  handleSort,
+  handlePageChange,
+  handleItemsPerPageChange
+} = useDataTable(categories, {
+  searchFields: ['category', 'category_desc'],
+  itemsPerPage: 10,
 });
-
-const sortedCategories = computed(() => {
-  const data = [...filteredCategories.value];
-  if (!sortKey.value) return data;
-
-  return data.sort((a, b) => {
-    const first = String(a[sortKey.value] ?? '').toLowerCase();
-    const second = String(b[sortKey.value] ?? '').toLowerCase();
-    const comparison = first.localeCompare(second, undefined, { numeric: true, sensitivity: 'base' });
-
-    return sortDirection.value === 'asc' ? comparison : -comparison;
-  })
-});
-
-const paginatedCategories = computed(() => {
-  const start = (currentPage.value - 1) * itemsPerPage.value;
-  const end = start + itemsPerPage.value;
-  return sortedCategories.value.slice(start, end);
-});
-
-const handleSearch = (value) => {
-  search.value = value;
-  currentPage.value = 1;
-}
-
-const handleSort = ({ key, direction }) => {
-  sortKey.value = key;
-  sortDirection.value = direction;
-  currentPage.value = 1;
-}
-
-const handlePageChange = (page) => {
-  currentPage.value = page;
-}
-
-const handleItemsPerPageChange = (page) => {
-  itemsPerPage.value = page;
-  currentPage.value = 1;
-}
-
 
 const openAddModal = () => {
   showAddModal.value = true;
@@ -92,6 +47,9 @@ const editModal = (data) => {
 }
 
 const closeAddModal = () => {
+  categoryId.value = '';
+  category.value = '';
+  description.value = '';
   showAddModal.value = false;
 }
 
@@ -100,38 +58,42 @@ const addCategory = async () => {
     'category': category.value,
     'description': description.value
   });
+
+  closeAddModal();
 }
 
-const editCategory = async () => {
+const updateCategory = async () => {
   const details = {
     'id': categoryId.value,
     'category': category.value,
     'description': description.value
   }
 
-  await store.editCategory(details);
+  await store.updateCategory(details);
+
+  closeAddModal();
 }
 
 onMounted(async () => {
   await store.getAllCategories();
-  categories.value = store.categories;
 });
 </script>
 
 <template>
   <DataTable
     :columns="columns"
-    :rows="paginatedCategories"
+    :rows="paginatedItems"
     :sortKey="sortKey"
     :sortDirection="sortDirection"
     @sort="handleSort"
   >
 
-     <template #header>
+    <template #header>
       <TableHeader
         headerText="E-Store Dashboard"
         mainText="Categories"
         subText="Manage your product categories."
+        label="Add Category"
         placeholder="Search categories..."
         @search="handleSearch"
         @openModal="openAddModal"
@@ -153,7 +115,9 @@ onMounted(async () => {
 
     <template #pagination>
       <Pagination
-        :totalItems="sortedCategories.length"
+        :totalItems="sortedItems.length"
+        :currentPage="currentPage"
+        :itemsPerPage="itemsPerPage"
         @pageChange="handlePageChange"
         @itemsPerPageChange="handleItemsPerPageChange"
       />
@@ -161,8 +125,10 @@ onMounted(async () => {
 
   </DataTable>
 
-  <AddModalForm
+  <FormModal
     v-if="showAddModal"
+    mainText="Categories"
+    :subText="categoryId ? 'Update a product category.' : 'Create a new product category.'"
     :cancelButton="true"
     @close="closeAddModal"
   >
@@ -193,9 +159,9 @@ onMounted(async () => {
         v-else
         customClass="w-full p-2 text-slate-50 rounded bg-blue-800 hover:bg-blue-700 cursor-pointer"
         label="Update"
-        @click="editCategory"
+        @click="updateCategory"
       />
     </template>
-  </AddModalForm>
+  </FormModal>
 
 </template>

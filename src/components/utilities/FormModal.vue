@@ -2,6 +2,14 @@
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
 const props = defineProps({
+  mainText: {
+    type: String,
+    default: 'Main Text'
+  },
+  subText: {
+    type: String,
+    default: 'Sub Text'
+  },
   cancelButton: Boolean,
   default: false
 });
@@ -26,8 +34,8 @@ const handleOverlay = (event) => {
 
       <div class="px-4 py-4 relative flex items-center bg-linear-to-r from-blue-950 to-blue-800">
         <div>
-          <h2 class="text-lg font-semibold text-slate-50">Add Category</h2>
-          <p class="mt-1 text-sm text-blue-100">Create new product category.</p>
+          <h2 class="text-lg font-semibold text-slate-50">{{ props.mainText }}</h2>
+          <p class="mt-1 text-sm text-blue-100">{{ props.subText }}</p>
         </div>
         <button
           type="button"

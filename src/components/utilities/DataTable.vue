@@ -51,7 +51,7 @@ const setSortIcon = (column) => {
 						v-for="column in props.columns"
 						:key="column.key"
 						:class="column.headerClass"
-						class="p-4 font-semibold"
+						class="p-3 font-semibold"
 					>
 					  <slot
 							:name="`header-${column.key}`"
@@ -70,7 +70,7 @@ const setSortIcon = (column) => {
 					</th>
 				  <th
 						v-if="$slots.actions"
-						class="p-4 text-center font-semibold"
+						class="p-3 text-center font-semibold"
 					>
 					  <slot
 							name="actions-header"
@@ -93,7 +93,7 @@ const setSortIcon = (column) => {
 						v-for="column in props.columns"
 						:key="column.key"
 						:class="column.columnClass"
-						class="px-3"
+						class="p-3"
 					>
 					  <slot
 							:name="column.key"
@@ -106,7 +106,7 @@ const setSortIcon = (column) => {
 					</td>
 					<td
 					  v-if="$slots.actions"
-						class="p-4"
+						class="p-3"
 					>
 					  <slot name="actions" :row="row"/>
 					</td>

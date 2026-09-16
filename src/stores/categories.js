@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 
-export const eStoreData = defineStore('e-store-data', {
+export const useCategoriesStore = defineStore('useCategoriesStore', {
 
   state: () => ({
     apiURI: import.meta.env.VITE_API_LOCAL_URI,
@@ -9,8 +9,9 @@ export const eStoreData = defineStore('e-store-data', {
       'Content-Type': 'application/json',
       'X-API-KEY': import.meta.env.VITE_API_LOCAL_KEY
     },
-    products: [],
-    categoriesColumn: [
+    errors: {},
+    categories: [],
+    columns: [
       {
         'key': 'category',
         'label': 'Category',
@@ -21,8 +22,6 @@ export const eStoreData = defineStore('e-store-data', {
         'label': 'Description'
       }
     ],
-    categories: [],
-    errors: {}
   }),
 
   actions: {
@@ -52,7 +51,7 @@ export const eStoreData = defineStore('e-store-data', {
 
     },
 
-    async editCategory(data) {
+    async updateCategory(data) {
 
       const response = await fetch(`${this.apiURI}/categories/update`, {
         method: 'PATCH',

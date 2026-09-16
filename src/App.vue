@@ -1,6 +1,6 @@
 <script setup>
   import { ref } from 'vue';
-  import SideNavComponent from './components/utilities/SideNavComponent.vue';
+  import SideNavComponent from './components/SideNavComponent.vue';
 
   const showSideNav = ref(true);
   const toggleSideNav = () => showSideNav.value = !showSideNav.value;

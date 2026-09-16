@@ -17,6 +17,10 @@ const props = defineProps({
     type: String,
     required: true
   },
+  label: {
+    type: String,
+    default: 'Button Label'
+  },
   placeholder: {
     type: String,
     default: 'Search...'
@@ -61,7 +65,7 @@ watch(search, (value) => {
       </div>
       <Button
         customClass="px-6 py-2.5 text-sm font-semibold inline-flex items-center justify-center gap-2 rounded shadow-sm text-blue-950 bg-blue-50 hover:bg-blue-900 hover:text-slate-50 cursor-pointer"
-        label="Add Category"
+        :label="props.label "
         iconName="fa-solid fa-plus"
         :buttonIcon="true"
         @click="openModal"
