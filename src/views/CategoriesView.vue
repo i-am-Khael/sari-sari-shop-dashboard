@@ -8,7 +8,7 @@ import TableHeader from '@/components/utilities/TableHeader.vue';
 import DataTable from '@/components/utilities/DataTable.vue';
 import Pagination from '@/components/utilities/Pagination.vue';
 import FormModal from '@/components/utilities/FormModal.vue';
-import InputText from '@/components/utilities/InputText.vue';
+import TextInputs from '@/components/utilities/TextInputs.vue';
 import Button from '@/components/utilities/Button.vue';
 
 const store = useCategoriesStore();
@@ -31,7 +31,7 @@ const {
   handlePageChange,
   handleItemsPerPageChange
 } = useDataTable(categories, {
-  searchFields: ['category', 'category_desc'],
+  searchFields: ['category', 'description'],
   itemsPerPage: 10,
 });
 
@@ -43,7 +43,7 @@ const editModal = (data) => {
   showAddModal.value = true;
   categoryId.value = data.id;
   category.value = data.category;
-  description.value = data.category_desc;
+  description.value = data.description;
 }
 
 const closeAddModal = () => {
@@ -133,14 +133,14 @@ onMounted(async () => {
     @close="closeAddModal"
   >
     <template #input>
-      <InputText
+      <TextInputs
         id="category"
         type="text"
         label="Category"
         placeholder="Category"
         v-model="category"
       />
-      <InputText
+      <TextInputs
         id="description"
         type="textarea"
         label="Description"

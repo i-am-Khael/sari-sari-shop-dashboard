@@ -36,7 +36,7 @@ const props = defineProps({
   },
   selectClass: {
     type: String,
-    default: "w-full px-3 py-2.5 text-sm text-slate-800 outline-none rounded border border-slate-300 bg-slate-50 placeholder:text-slate-400 focus:border-blue-600"
+    default: "w-full px-3 py-2.5 text-sm text-slate-800 outline-none rounded border border-slate-300 bg-slate-50 placeholder:text-slate-400 focus:border-blue-600 apperance-none cursor-pointer"
   },
   accept: {
     type: String,
@@ -63,7 +63,7 @@ const props = defineProps({
     default: "w-full px-3 py-2.5 text-sm text-slate-800 resize-none outline-none rounded border border-slate-300 bg-slate-50 placeholder:text-slate-400 focus:border-blue-600",
   },
   modelValue: {
-    type: String,
+    type: [String, File, Array, Object],
     default: ''
   }
 });
@@ -120,7 +120,6 @@ const updateFile = (event) => {
       v-if="props.type === 'select'"
       :class="props.selectClass"
       :id="props.id"
-      :type="props.type"
       :placeholder="props.placeholder"
       :disabled="props.disabled"
       :required="props.required"

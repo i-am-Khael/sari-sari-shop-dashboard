@@ -2,7 +2,7 @@
 import { ref, watch } from 'vue';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import Button from './Button.vue';
-import InputText from './InputText.vue';
+import TextInputs from './TextInputs.vue';
 
 const props = defineProps({
   headerText: {
@@ -55,7 +55,7 @@ watch(search, (value) => {
 		<div class="flex items-center gap-3">
       <div class="relative">
         <FontAwesomeIcon icon="fa-solid fa-magnifying-glass" class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-500"/>
-        <InputText
+        <TextInputs
           id="search"
           type="text"
           inputClass="w-full py-2 pl-10 pr-4 text-sm rounded  bg-slate-50"

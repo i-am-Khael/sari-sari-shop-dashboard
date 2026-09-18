@@ -13,7 +13,7 @@ export const useProductsStore = defineStore('useProductsStore', {
     products: [],
     columns: [
       {
-        'key': 'image',
+        'key': 'filename',
         'label': 'Image'
       },
       {
@@ -48,15 +48,45 @@ export const useProductsStore = defineStore('useProductsStore', {
     async getAllProducts() {
 
       const response = await fetch(`${this.apiURI}/products/all`, {
-        method: 'POST',
+        method: 'GET',
         headers: this.headers
       });
 
       const results = await response.json();
-
       if (results) this.products = results.data;
 
     },
+
+
+    async addProduct(data) {
+
+      const response = await fetch(`${this.apiURI}/products/add`, {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'X-API-KEY': this.apiKEY
+        },
+        body: data
+      });
+
+      const results = await response.json();
+      if (results) this.getAllProducts();
+
+    },
+
+    async deleteProduct(id) {
+
+      const response = await fetch(`${this.apiURI}/products/delete`, {
+        method: 'DELETE',
+        headers: this.headers,
+        body: JSON.stringify({ 'id': id })
+      });
+
+      const result = await response.json();
+
+      if (result) this.getAllProducts();
+
+    }
 
   }
 

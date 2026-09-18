@@ -18,7 +18,7 @@ export const useCategoriesStore = defineStore('useCategoriesStore', {
         'sortable': true
       },
       {
-        'key': 'category_desc',
+        'key': 'description',
         'label': 'Description'
       }
     ],
