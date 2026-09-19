@@ -1,4 +1,6 @@
 <script setup>
+import Errors from './Errors.vue';
+
 const props = defineProps({
   for: String,
   label: String,
@@ -63,8 +65,20 @@ const props = defineProps({
     default: "w-full px-3 py-2.5 text-sm text-slate-800 resize-none outline-none rounded border border-slate-300 bg-slate-50 placeholder:text-slate-400 focus:border-blue-600",
   },
   modelValue: {
-    type: [String, File, Array, Object],
+    type: [String, Number, File, Array, Object],
     default: ''
+  },
+  hasError: {
+    type: [String, Boolean],
+    default: false
+  },
+  errorMsg: {
+    type: String,
+    default: 'An error occurred! Please check input.'
+  },
+  errorClass: {
+    type: String,
+    default: 'text-sm text-red-500'
   }
 });
 
@@ -94,7 +108,7 @@ const updateFile = (event) => {
 
     <input
       v-if="props.type === 'text'"
-      :class="props.inputClass"
+      :class="[props.inputClass, { 'text-red-500! border-red-500!': !!props.hasError }]"
       :id="props.id"
       :type="props.type"
       :placeholder="props.placeholder"
@@ -106,7 +120,7 @@ const updateFile = (event) => {
 
     <input
       v-if="props.type === 'file'"
-      :class="props.fileClass"
+      :class="[props.fileClass, { 'text-red-500! border-red-500!': !!props.hasError }]"
       :id="props.id"
       :type="props.type"
       :disabled="props.disabled"
@@ -118,7 +132,7 @@ const updateFile = (event) => {
 
     <select
       v-if="props.type === 'select'"
-      :class="props.selectClass"
+      :class="[props.selectClass, { 'text-red-500! border-red-500!': !!props.hasError }]"
       :id="props.id"
       :placeholder="props.placeholder"
       :disabled="props.disabled"
@@ -126,7 +140,7 @@ const updateFile = (event) => {
       :value="props.modelValue"
       @change="updateValue"
     >
-      <option value="">{{ props.placeholder || 'Select an option...' }}</option>
+      <option value="">{{ 'Select an option...' }}</option>
       <option
         v-for="item in props.items"
         :key="item[props.itemValue]"
@@ -138,7 +152,7 @@ const updateFile = (event) => {
 
     <textarea
       v-if="props.type === 'textarea'"
-      :class="props.textAreaClass"
+      :class="[props.textAreaClass, { 'text-red-500! border-red-500!': !!props.hasError }]"
       :id="props.id"
       :placeholder="props.placeholder"
       :disabled="props.disabled"
@@ -148,5 +162,7 @@ const updateFile = (event) => {
       :value="props.modelValue"
       @input="updateValue"
     ></textarea>
+
+    <Errors v-if="props.hasError" :class="props.errorClass" :msg="props.errorMsg"/>
   </div>
 </template>

@@ -4,6 +4,7 @@ import { storeToRefs } from 'pinia';
 import { useProductsStore } from '@/stores/products';
 import { useCategoriesStore } from '@/stores/categories';
 import { useDataTable } from '@/composables/useDataTable';
+import { utilities } from '@/composables/utilities';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import DataTable from '@/components/utilities/DataTable.vue';
 import TableHeader from '@/components/utilities/TableHeader.vue';
@@ -12,21 +13,23 @@ import FormModal from '@/components/utilities/FormModal.vue';
 import TextInputs from '@/components/utilities/TextInputs.vue';
 import Button from '@/components/utilities/Button.vue';
 
+const path = import.meta.env.VITE_STORAGE_PATH;
 const store = useProductsStore();
 const categoriesStore = useCategoriesStore();
-const { products, errors } = storeToRefs(store);
+const { products } = storeToRefs(store);
 const { categories } = storeToRefs(categoriesStore);
 const columns = store.columns;
 const showModal = ref(false);
-
 const productId = ref('');
 const product = ref('');
 const category = ref('');
 const price = ref('');
+const formattedPrice = ref('');
 const stock = ref('');
 const description = ref('');
 const image = ref(null);
 const preview = ref(null);
+const errors = ref(null);
 
 const {
   currentPage,
@@ -43,6 +46,8 @@ const {
   searchFields: ['product', 'category', 'description'],
   itemsPerPage: 10
 });
+
+const { formatMoney } = utilities();
 
 
 const resetModal = () => {
@@ -62,6 +67,7 @@ const openModal = () => {
 
 const closeModal = () => {
   showModal.value = false;
+  errors.value = null;
   resetModal();
 }
 
@@ -73,7 +79,6 @@ const handleFileChange = (file) => {
 
 
 const addProduct = async () => {
-
   const data = new FormData();
   data.append('product', product.value);
   data.append('category_id', category.value);
@@ -83,7 +88,10 @@ const addProduct = async () => {
 
   if (image.value instanceof File) data.append('file', image.value);
 
-  await store.addProduct(data);
+  const result = await store.addProduct(data);
+
+  if (result.status !== 200) errors.value = result.errors;
+  if (result.status === 200) closeModal();
 
 }
 
@@ -95,13 +103,28 @@ const editProduct = (data) => {
   price.value = data.price;
   stock.value = data.stock;
   description.value = data.description;
-  preview.value = data.filename ? `http://localhost:8000/storage/products/${data.filename}` : null;
+  preview.value = data.filename ? `${path}products/${data.filename}` : null;
   image.value = null;
   showModal.value = true;
 }
 
 
 const updateProduct = async () => {
+
+  const data = new FormData();
+  data.append('id', productId.value);
+  data.append('product', product.value);
+  data.append('price', price.value);
+  data.append('stock', stock.value);
+  data.append('description', description.value);
+  data.append('category', category.value);
+
+  if (image.value instanceof File) data.append('file', image.value);
+
+  const result = await store.updateProduct(data);
+
+  if (result.status !== 200) errors.value = result.errors;
+  if (result.status === 200) closeModal();
 
 }
 
@@ -139,7 +162,7 @@ onMounted(() => {
     <template #filename="{ row }">
       <img
         class="w-15 h-15"
-        :src="`http://localhost:8000/storage/products/${row.filename}`"
+        :src="row.filename ? `${path}products/${row.filename}` : `${path}default.png`"
         :alt="row.product"
       >
     </template>
@@ -184,12 +207,22 @@ onMounted(() => {
     :cancelButton="true"
     @close="closeModal"
   >
+
     <template #input>
+      <div
+        v-if="errors?.key || errors?.server"
+        class="w-full p-3 rounded text-sm text-slate-50 bg-red-400"
+      >
+        {{ errors?.key || errors?.server }}
+      </div>
+
       <TextInputs
         id="product"
         type="text"
         label="Product"
         placeholder="Product"
+        :hasError="errors?.product"
+        :errorMsg="errors?.product"
         v-model="product"
       />
 
@@ -200,6 +233,8 @@ onMounted(() => {
         placeholder="Category"
         itemValue="id"
         itemLabel="category"
+        :hasError="errors?.category"
+        :errorMsg="errors?.category"
         :items="categories"
         v-model="category"
       />
@@ -241,6 +276,8 @@ onMounted(() => {
           type="file"
           label="Product Image"
           accept="image/png, image/jpeg, image/webp"
+          :hasError="errors?.file"
+          :errorMsg="errors?.file"
           v-model="image"
           @update:modelValue="handleFileChange"
         />

@@ -27,7 +27,7 @@ const handleOverlay = (event) => {
 
 <template>
   <section
-    class="w-full h-full fixed inset-0 z-50 flex items-center justify-center backdrop-blur-xs bg-slate-950/40"
+    class="w-full h-full absolute overflow-y-scroll top-0 left-0 z-50 flex items-center justify-center backdrop-blur-xs bg-slate-950/40"
     @click="handleOverlay"
   >
     <div class="w-full max-w-125 relative overflow-hidden rounded bg-slate-50 shadow-2xl">

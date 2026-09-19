@@ -29,6 +29,7 @@ export const useProductsStore = defineStore('useProductsStore', {
       {
         'key': 'price',
         'label': 'Price',
+        'money': true,
         'sortable': true,
       },
       {
@@ -53,10 +54,12 @@ export const useProductsStore = defineStore('useProductsStore', {
       });
 
       const results = await response.json();
-      if (results) this.products = results.data;
+
+      if (results.status === 200) this.products = results.data;
+
+      return results;
 
     },
-
 
     async addProduct(data) {
 
@@ -70,7 +73,29 @@ export const useProductsStore = defineStore('useProductsStore', {
       });
 
       const results = await response.json();
-      if (results) this.getAllProducts();
+
+      if (results.status === 200) this.getAllProducts();
+
+      return results;
+
+    },
+
+    async updateProduct(data) {
+
+      const response = await fetch(`${this.apiURI}/products/update`, {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'X-API-KEY': this.apiKEY
+        },
+        body: data
+      });
+
+      const result = await response.json();
+
+      if (result.status === 200) this.getAllProducts();
+
+      return result;
 
     },
 
@@ -82,9 +107,11 @@ export const useProductsStore = defineStore('useProductsStore', {
         body: JSON.stringify({ 'id': id })
       });
 
-      const result = await response.json();
+      const results = await response.json();
 
-      if (result) this.getAllProducts();
+      if (results === 200) this.getAllProducts();
+
+      return results;
 
     }
 

@@ -1,5 +1,8 @@
 <script setup>
+import { utilities } from '@/composables/utilities';
 import Button from './Button.vue';
+
+const { formatMoney } = utilities();
 
 const props = defineProps({
   columns: {
@@ -101,7 +104,7 @@ const setSortIcon = (column) => {
 							:value="row[column.key]"
 							:column="column"
 						>
-						  {{ row[column.key] }}
+						  {{ column?.money ? `$${formatMoney(row[column.key])}` : row[column.key] }}
 						</slot>
 					</td>
 					<td
