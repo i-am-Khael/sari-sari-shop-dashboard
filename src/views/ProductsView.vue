@@ -4,7 +4,6 @@ import { storeToRefs } from 'pinia';
 import { useProductsStore } from '@/stores/products';
 import { useCategoriesStore } from '@/stores/categories';
 import { useDataTable } from '@/composables/useDataTable';
-import { utilities } from '@/composables/utilities';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import DataTable from '@/components/utilities/DataTable.vue';
 import TableHeader from '@/components/utilities/TableHeader.vue';
@@ -24,7 +23,6 @@ const productId = ref('');
 const product = ref('');
 const category = ref('');
 const price = ref('');
-const formattedPrice = ref('');
 const stock = ref('');
 const description = ref('');
 const image = ref(null);
@@ -46,8 +44,6 @@ const {
   searchFields: ['product', 'category', 'description'],
   itemsPerPage: 10
 });
-
-const { formatMoney } = utilities();
 
 
 const resetModal = () => {
@@ -88,10 +84,14 @@ const addProduct = async () => {
 
   if (image.value instanceof File) data.append('file', image.value);
 
-  const result = await store.addProduct(data);
+  const results = await store.addProduct(data);
 
-  if (result.status !== 200) errors.value = result.errors;
-  if (result.status === 200) closeModal();
+  if (results.status !== 200) {
+    errors.value = results.errors;
+    return;
+  }
+
+  closeModal();
 
 }
 
@@ -121,15 +121,26 @@ const updateProduct = async () => {
 
   if (image.value instanceof File) data.append('file', image.value);
 
-  const result = await store.updateProduct(data);
+  const results = await store.updateProduct(data);
 
-  if (result.status !== 200) errors.value = result.errors;
-  if (result.status === 200) closeModal();
+  if (results.status !== 200) {
+    errors.value = results.errors;
+    return;
+  }
+
+  closeModal();
 
 }
 
 const deleteProduct = async (id) => {
-  await store.deleteProduct(id);
+  const results = await store.deleteProduct(id);
+
+  if (results.status !== 200) {
+    errors.value = results.errors;
+    return;
+  }
+
+  await store.getAllProducts();
 }
 
 

@@ -12,12 +12,13 @@ import TextInputs from '@/components/utilities/TextInputs.vue';
 import Button from '@/components/utilities/Button.vue';
 
 const store = useCategoriesStore();
-const { categories, errors } = storeToRefs(store);
+const { categories } = storeToRefs(store);
 const categoryId = ref('');
 const category = ref('');
 const description = ref('');
 const columns = store.columns;
 const showAddModal = ref(false);
+const errors = ref(null);
 
 const {
   currentPage,
@@ -50,26 +51,40 @@ const closeAddModal = () => {
   categoryId.value = '';
   category.value = '';
   description.value = '';
+  errors.value = null;
   showAddModal.value = false;
 }
 
 const addCategory = async () => {
-  await store.addCategory({
+
+  const data = {
     'category': category.value,
     'description': description.value
-  });
+  }
+
+  const results = await store.addCategory(data);
+
+  if (results.status !== 200) {
+    errors.value = results.errors;
+    return;
+  }
 
   closeAddModal();
 }
 
 const updateCategory = async () => {
-  const details = {
+  const data = {
     'id': categoryId.value,
     'category': category.value,
     'description': description.value
   }
 
-  await store.updateCategory(details);
+  const results = await store.updateCategory(data);
+
+  if (results.status !== 200) {
+    errors.value = results.errors;
+    return;
+  }
 
   closeAddModal();
 }
@@ -138,6 +153,8 @@ onMounted(async () => {
         type="text"
         label="Category"
         placeholder="Category"
+        :hasError="errors?.category"
+        :errorMsg="errors?.category"
         v-model="category"
       />
       <TextInputs

@@ -57,8 +57,6 @@ export const useProductsStore = defineStore('useProductsStore', {
 
       if (results.status === 200) this.products = results.data;
 
-      return results;
-
     },
 
     async addProduct(data) {
@@ -74,7 +72,7 @@ export const useProductsStore = defineStore('useProductsStore', {
 
       const results = await response.json();
 
-      if (results.status === 200) this.getAllProducts();
+      if (results.status === 200) await this.getAllProducts();
 
       return results;
 
@@ -91,11 +89,11 @@ export const useProductsStore = defineStore('useProductsStore', {
         body: data
       });
 
-      const result = await response.json();
+      const results = await response.json();
 
-      if (result.status === 200) this.getAllProducts();
+      if (results.status === 200) await this.getAllProducts();
 
-      return result;
+      return results;
 
     },
 
@@ -108,8 +106,6 @@ export const useProductsStore = defineStore('useProductsStore', {
       });
 
       const results = await response.json();
-
-      if (results === 200) this.getAllProducts();
 
       return results;
 

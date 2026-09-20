@@ -9,7 +9,6 @@ export const useCategoriesStore = defineStore('useCategoriesStore', {
       'Content-Type': 'application/json',
       'X-API-KEY': import.meta.env.VITE_API_LOCAL_KEY
     },
-    errors: {},
     categories: [],
     columns: [
       {
@@ -33,8 +32,10 @@ export const useCategoriesStore = defineStore('useCategoriesStore', {
         headers: this.headers
       });
 
-      const result = await response.json();
-      result.status !== 200 ? this.errors = result.errors : this.categories = result.data
+      const results = await response.json();
+
+      if (results.status === 200) this.categories = results.data;
+
     },
 
     async addCategory(data) {
@@ -45,9 +46,11 @@ export const useCategoriesStore = defineStore('useCategoriesStore', {
         body: JSON.stringify(data)
       });
 
-      const result = await response.json();
+      const results = await response.json();
 
-      if (result) this.getAllCategories();
+      if (results.status === 200) this.getAllCategories();
+
+      return results;
 
     },
 
@@ -59,29 +62,13 @@ export const useCategoriesStore = defineStore('useCategoriesStore', {
         body: JSON.stringify(data)
       });
 
-      const result = await response.json();
+      const results = await response.json();
 
-      if (result) this.getAllCategories();
+      if (results.status === 200) this.getAllCategories();
+
+      return results;
 
     },
-
-    async deleteCategory(id) {
-
-      const response = await fetch(`${this.apiURI}/categories/delete`, {
-        method: 'DELETE',
-        headers: this.headers,
-        body: JSON.stringify({ id: id })
-      });
-
-      const result = await response.json();
-
-      if (result.status === 200) {
-        await this.getAllCategories();
-      } else {
-        this.errors = result.errors;
-      }
-
-    }
 
 
   },
