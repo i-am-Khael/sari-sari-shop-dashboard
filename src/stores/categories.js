@@ -3,11 +3,11 @@ import { defineStore } from 'pinia'
 export const useCategoriesStore = defineStore('useCategoriesStore', {
 
   state: () => ({
-    apiURI: import.meta.env.VITE_API_LOCAL_URI,
-    apiKEY: import.meta.env.VITE_API_LOCAL_KEY,
+    apiURI: import.meta.env.VITE_API_URI,
+    apiKEY: import.meta.env.VITE_API_KEY,
     headers: {
       'Content-Type': 'application/json',
-      'X-API-KEY': import.meta.env.VITE_API_LOCAL_KEY
+      'X-API-KEY': import.meta.env.VITE_API_KEY
     },
     categories: [],
     columns: [

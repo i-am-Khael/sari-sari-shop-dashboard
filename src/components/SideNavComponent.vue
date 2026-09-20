@@ -13,7 +13,7 @@
         </div>
 
         <div>
-          <h1 class="text-lg font-bold tracking-light">E-Store</h1>
+          <h1 class="text-lg font-bold tracking-light">Sari-Sari-Shop</h1>
           <p class="text-xs font-medium uppercase tracking-widest text-blue-200">Dashboard</p>
         </div>
 

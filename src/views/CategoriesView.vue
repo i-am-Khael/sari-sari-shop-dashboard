@@ -105,7 +105,7 @@ onMounted(async () => {
 
     <template #header>
       <TableHeader
-        headerText="E-Store Dashboard"
+        headerText="Sari-Sari-Shop Dashboard"
         mainText="Categories"
         subText="Manage your product categories."
         label="Add Category"

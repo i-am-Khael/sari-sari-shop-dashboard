@@ -160,7 +160,7 @@ onMounted(() => {
   >
     <template #header>
       <TableHeader
-        headerText="E-Store Dashboard"
+        headerText="Sari-Sari-Shop Dashboard"
         mainText="Products"
         subText="Manage your product items."
         label="Add Products"
