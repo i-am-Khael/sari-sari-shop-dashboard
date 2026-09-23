@@ -12,7 +12,7 @@ import FormModal from '@/components/utilities/FormModal.vue';
 import TextInputs from '@/components/utilities/TextInputs.vue';
 import Button from '@/components/utilities/Button.vue';
 
-const path = import.meta.env.VITE_STORAGE_PATH;
+const path = import.meta.env.VITE_API_STORAGE;
 const store = useProductsStore();
 const categoriesStore = useCategoriesStore();
 const { products } = storeToRefs(store);
@@ -275,7 +275,7 @@ onMounted(() => {
         v-model="description"
       />
 
-      <div class="w-full flex justify-between gap-2">
+      <div class="w-full inline-flex justify-between gap-2">
         <img
           v-if="preview"
           class="w-15 h-15"

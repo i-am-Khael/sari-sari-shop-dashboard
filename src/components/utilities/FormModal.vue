@@ -16,7 +16,8 @@ const props = defineProps({
 
 const emit = defineEmits(['close']);
 
-const closeModal = () => {
+const closeModal = (e) => {
+  e.preventDefault();
   emit('close');
 }
 

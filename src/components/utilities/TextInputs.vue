@@ -107,7 +107,7 @@ const updateFile = (event) => {
     </label>
 
     <input
-      v-if="props.type === 'text'"
+      v-if="props.type === 'text' || props.type === 'color'"
       :class="[props.inputClass, { 'text-red-500! border-red-500!': !!props.hasError }]"
       :id="props.id"
       :type="props.type"
