@@ -25,6 +25,7 @@ const category = ref('');
 const price = ref('');
 const stock = ref('');
 const description = ref('');
+const featured = ref('');
 const image = ref(null);
 const preview = ref(null);
 const errors = ref(null);
@@ -53,6 +54,7 @@ const resetModal = () => {
   price.value = '';
   stock.value = '';
   description.value = '';
+  featured.value = '';
   image.value = null;
   preview.value = null;
 }
@@ -81,6 +83,7 @@ const addProduct = async () => {
   data.append('price', price.value);
   data.append('stock', stock.value);
   data.append('description', description.value);
+  data.append('featured', featured.value);
 
   if (image.value instanceof File) data.append('file', image.value);
 
@@ -103,6 +106,7 @@ const editProduct = (data) => {
   price.value = data.price;
   stock.value = data.stock;
   description.value = data.description;
+  featured.value = data.featured;
   preview.value = data.filename ? `${path}products/${data.filename}` : null;
   image.value = null;
   showModal.value = true;
@@ -131,6 +135,27 @@ const updateProduct = async () => {
   closeModal();
 
 }
+
+
+const handleIsFeatured = async (rowData, event) => {
+  const featured = event.target.checked ? 1 : 0;
+  const data = new FormData();
+  data.append('id', rowData.id);
+  data.append('product', rowData.product);
+  data.append('price', rowData.price);
+  data.append('stock', rowData.stock);
+  data.append('description', rowData.description);
+  data.append('category', rowData.category_id);
+  data.append('featured', featured);
+
+  const results = await store.updateProduct(data);
+
+  if (results.status !== 200) {
+    errors.value = results.errors;
+    return;
+  }
+}
+
 
 const deleteProduct = async (id) => {
   const results = await store.deleteProduct(id);
@@ -176,6 +201,18 @@ onMounted(() => {
         :src="row.filename ? `${path}products/${row.filename}` : `${path}default.png`"
         :alt="row.product"
       >
+    </template>
+
+    <template #featured="{ row }">
+      <div class="inline-flex items-center justify-center gap-2">
+        <input
+          type="checkbox"
+          class="w-5 h-5 cursor-pointer"
+          :checked="row.featured === 1 ? true : false"
+          @change.stop="handleIsFeatured(row, $event)"
+          >
+        <span>{{ row.featured === 1 ? 'Yes' : 'No' }}</span>
+      </div>
     </template>
 
     <template #actions="{ row }">
@@ -227,21 +264,30 @@ onMounted(() => {
         {{ errors?.key || errors?.server }}
       </div>
 
-      <TextInputs
-        id="product"
-        type="text"
-        label="Product"
-        placeholder="Product"
-        :hasError="errors?.product"
-        :errorMsg="errors?.product"
-        v-model="product"
-      />
+      <div class="inline-flex items-center justify-between gap-4">
+        <TextInputs
+          id="product"
+          type="text"
+          label="Product"
+          placeholder="Product"
+          :hasError="errors?.product"
+          :errorMsg="errors?.product"
+          v-model="product"
+        />
+        <TextInputs
+          id="featured"
+          type="select"
+          label="Featured"
+          itemValue="value"
+          :items="[{ 'label': 'Yes', 'value': 1 }, { 'label': 'No', 'value': 0 }]"
+          v-model="featured"
+        />
+      </div>
 
       <TextInputs
         id="category"
         type="select"
         label="Category"
-        placeholder="Category"
         itemValue="id"
         itemLabel="category"
         :hasError="errors?.category"

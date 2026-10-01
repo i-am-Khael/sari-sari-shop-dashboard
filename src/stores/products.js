@@ -40,6 +40,10 @@ export const useProductsStore = defineStore('useProductsStore', {
       {
         'key': 'description',
         'label': 'Description',
+      },
+      {
+        'key': 'featured',
+        'label': 'Featured',
       }
     ]
   }),
