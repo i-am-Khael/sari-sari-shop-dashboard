@@ -130,7 +130,7 @@ export const useCategoriesStore = defineStore('useCategoriesStore', {
 
       const results = await response.json();
 
-      if (results.status === 200) this.getAllCategories();
+      if (results.status === 201) this.getAllCategories();
 
       return results;
 

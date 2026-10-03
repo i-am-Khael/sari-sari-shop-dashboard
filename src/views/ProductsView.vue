@@ -89,7 +89,7 @@ const addProduct = async () => {
 
   const results = await store.addProduct(data);
 
-  if (results.status !== 200) {
+  if (results.status !== 201) {
     errors.value = results.errors;
     return;
   }
@@ -122,6 +122,7 @@ const updateProduct = async () => {
   data.append('stock', stock.value);
   data.append('description', description.value);
   data.append('category', category.value);
+  data.append('featured', featured.value);
 
   if (image.value instanceof File) data.append('file', image.value);
 
@@ -225,14 +226,14 @@ onMounted(() => {
         >
           <FontAwesomeIcon icon="fa-solid fa-pen-to-square" class="text-xl"/>
         </button>
-        <button
+        <!-- <button
           type="button"
           aria-label="Delete a product."
-          class="text-red-400 hover:text-red-500 cursor-pointer"
-           @click="deleteProduct(row.id)"
+          disabled
+          class="text-red-400 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
         >
           <FontAwesomeIcon icon="fa-solid fa-trash" class="text-xl"/>
-        </button>
+        </button> -->
       </div>
     </template>
 

@@ -76,7 +76,7 @@ export const useProductsStore = defineStore('useProductsStore', {
 
       const results = await response.json();
 
-      if (results.status === 200) await this.getAllProducts();
+      if (results.status === 201) await this.getAllProducts();
 
       return results;
 

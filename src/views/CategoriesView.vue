@@ -73,7 +73,7 @@ const addCategory = async () => {
 
   const results = await store.addCategory(data);
 
-  if (results.status !== 200) {
+  if (results.status !== 201) {
     errors.value = results.errors;
     return;
   }
