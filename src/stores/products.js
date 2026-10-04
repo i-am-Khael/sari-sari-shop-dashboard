@@ -31,11 +31,13 @@ export const useProductsStore = defineStore('useProductsStore', {
         'label': 'Price',
         'money': true,
         'sortable': true,
+        'columnClass': 'p-3 text-right'
       },
       {
         'key': 'stock',
         'label': 'Stock',
         'sortable': true,
+        'columnClass': 'p-3 text-right'
       },
       {
         'key': 'description',
@@ -43,7 +45,7 @@ export const useProductsStore = defineStore('useProductsStore', {
       },
       {
         'key': 'featured',
-        'label': 'Featured',
+        'label': 'Featured'
       }
     ]
   }),

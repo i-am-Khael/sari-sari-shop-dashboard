@@ -56,7 +56,7 @@
       </RouterLink>
     </nav>
 
-    <!-- <div class="mt-auto">
+     <!-- <div class="mt-auto">
       <RouterLink
         to="/profile"
         class="px-4 py-3 text-sm font-medium group flex items-center gap-3 rounded hover:bg-white/10 hover:text-white transition-all duration-200"
