@@ -137,7 +137,7 @@ onMounted(async () => {
     </template>
 
     <template #actions="{ row }">
-      <div class="flex items-center justify-center gap-3">
+      <div class="inline-flex items-center justify-center gap-3">
         <button
           type="button"
           aria-label="Edit a category."
@@ -145,6 +145,14 @@ onMounted(async () => {
            @click="editModal(row)"
         >
           <FontAwesomeIcon icon="fa-solid fa-pen-to-square" class="text-xl"/>
+        </button>
+        <button
+          type="button"
+          aria-label="Delete a category."
+          disabled
+          class="text-red-400 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          <FontAwesomeIcon icon="fa-solid fa-trash" class="text-xl"/>
         </button>
       </div>
     </template>

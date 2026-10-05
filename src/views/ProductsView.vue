@@ -226,14 +226,14 @@ onMounted(() => {
         >
           <FontAwesomeIcon icon="fa-solid fa-pen-to-square" class="text-xl"/>
         </button>
-        <!-- <button
+         <button
           type="button"
           aria-label="Delete a product."
           disabled
           class="text-red-400 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
         >
           <FontAwesomeIcon icon="fa-solid fa-trash" class="text-xl"/>
-        </button> -->
+        </button>
       </div>
     </template>
 

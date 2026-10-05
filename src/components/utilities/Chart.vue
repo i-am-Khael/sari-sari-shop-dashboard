@@ -41,6 +41,10 @@ const props = defineProps({
       responsive: true,
     })
   },
+  class: {
+    type: String,
+    default: 'p-4 h-112.5 rounded bg-slate-200 shadow-md'
+  }
 });
 
 const chartComponents = {
@@ -51,7 +55,7 @@ const chartComponents = {
 </script>
 
 <template>
-  <div class="p-4 h-80 rounded bg-slate-200">
+  <div :class="props.class">
     <component
       :is="chartComponents[props.graph]"
       :data="props.data"

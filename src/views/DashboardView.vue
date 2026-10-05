@@ -1,5 +1,5 @@
  <script setup>
-import { computed, onMounted } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useDashboardStore } from '@/stores/dashboard';
 import { utilities } from '@/composables/utilities';
@@ -9,7 +9,47 @@ import Chart from '@/components/utilities/Chart.vue';
 const { formatMoney } = utilities();
 
 const store = useDashboardStore();
-const { totals, popularCategories } = storeToRefs(store);
+const { totals, sales, popularCategories } = storeToRefs(store);
+
+const period = ref('day');
+const selectedDate = ref(new Date().toISOString().slice(0, 10));
+
+
+// const salesData = computed(() => ({
+//   labels: sales.value.labels,
+//   datasets: [
+//     {
+//       label: 'Sales',
+//       data: sales.value.sales,
+//       backgroundColor: red,
+//       borderColor: 'gray'
+//     },
+//   ]
+// }));
+
+
+// const salesOptions = {
+//   responsive: true,
+//   maintainAspectRatio: false,
+//   plugins: {
+//     legend: {
+//       display: false,
+//     },
+//     title: {
+//       display: true,
+//       text: 'Popular Categories ( Item Sold ) '
+//     }
+//   },
+//   scales: {
+//     y: {
+//       beginAtZero: true,
+//       ticks: {
+//         precision: 0
+//       }
+//     }
+//   }
+// }
+
 
 const popCategoriesData = computed(() => ({
   labels: popularCategories.value.map(item => item.category),
@@ -17,8 +57,8 @@ const popCategoriesData = computed(() => ({
     {
       data: popularCategories.value.map(item => Number(item.total_items_sold)),
       backgroundColor: popularCategories.value.map(item => item.color),
-      borderColor: popularCategories.value.map(item => item.color)
-    }
+      borderColor: 'gray'
+    },
   ]
 }));
 
@@ -48,6 +88,10 @@ const popCategoriesOptions = {
 
 onMounted(() => {
   store.getTotals();
+  store.getSales({
+    'period': period.value,
+    'date': selectedDate.value
+  });
   store.getPopularCategories();
 });
 
@@ -83,17 +127,48 @@ onMounted(() => {
       />
     </div>
 
-    <div class="w-full mt-6 grid grid-cols-2 gap-4">
+    <div class="w-full flex flex-col gap-4 mt-6">
+
+      <div class="p-6 rounded bg-slate-400">
+        <div class="flex flex-row-reverse items-center gap-4">
+          <div class="inline-flex items-center justify-center gap-2">
+            <label for="period" class="font-medium text-slate-700">Sales Per:</label>
+            <select
+              id="period"
+              name="period"
+              class="px-2 py-1 rounded border border-slate-300 cursor-pointer"
+              v-model="period"
+            >
+              <option value="day">Day</option>
+              <option value="week">Week</option>
+              <option value="month">Month</option>
+              <option value="Year">Year</option>
+            </select>
+          </div>
+          <div class="inline-flex items-center justify-center gap-2">
+            <label for="selectedDate" class="font-medium text-slate-700">Date</label>
+            <input
+              id="selectedDate"
+              type="date"
+              class="px-2 py-1 rounded border border-slate-300 cursor-pointer"
+              v-model="selectedDate"
+            >
+          </div>
+        </div>
+        <Chart
+          graph="Line"
+          :data="popCategoriesData"
+          :options="popCategoriesOptions"
+          class="h-112.5"
+        />
+      </div>
+
       <Chart
         graph="Bar"
         :data="popCategoriesData"
         :options="popCategoriesOptions"
       />
-      <Chart
-        graph="Bar"
-        :data="popCategoriesData"
-        :options="popCategoriesOptions"
-      />
+
     </div>
 
   </section>

@@ -39,7 +39,7 @@ const props = defineProps({
 </script>
 
 <template>
-	<div class="p-5 rounded" :class="props.customClass">
+	<div class="p-5 rounded shadow-md" :class="props.customClass">
 	  <div class="inline-flex items-center justify-center gap-4">
 		  <FontAwesomeIcon :icon="props.icon" :class="props.iconClass"/>
 			<div>
