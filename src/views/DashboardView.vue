@@ -1,54 +1,57 @@
  <script setup>
-import { ref, computed, onMounted } from 'vue';
+import { ref, watch, computed, onMounted } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useDashboardStore } from '@/stores/dashboard';
 import { utilities } from '@/composables/utilities';
 import DashboardCard from '@/components/utilities/DashboardCard.vue';
 import Chart from '@/components/utilities/Chart.vue';
 
-const { formatMoney } = utilities();
-
 const store = useDashboardStore();
+const { formatMoney } = utilities();
 const { totals, sales, popularCategories } = storeToRefs(store);
 
-const period = ref('day');
-const selectedDate = ref(new Date().toISOString().slice(0, 10));
+const today = () => {
+  const date = new Date();
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
+
+const period = ref('Day');
+const selectedDate = ref(today());
 
 
-// const salesData = computed(() => ({
-//   labels: sales.value.labels,
-//   datasets: [
-//     {
-//       label: 'Sales',
-//       data: sales.value.sales,
-//       backgroundColor: red,
-//       borderColor: 'gray'
-//     },
-//   ]
-// }));
+const salesData = computed(() => ({
+  labels: sales.value.labels,
+  datasets: [
+    {
+      label: 'Sales',
+      data: sales.value.sales ?? [],
+      backgroundColor: 'blue',
+      borderColor: '#fff'
+    },
+  ]
+}));
 
 
-// const salesOptions = {
-//   responsive: true,
-//   maintainAspectRatio: false,
-//   plugins: {
-//     legend: {
-//       display: false,
-//     },
-//     title: {
-//       display: true,
-//       text: 'Popular Categories ( Item Sold ) '
-//     }
-//   },
-//   scales: {
-//     y: {
-//       beginAtZero: true,
-//       ticks: {
-//         precision: 0
-//       }
-//     }
-//   }
-// }
+const salesOptions = {
+  responsive: true,
+  maintainAspectRatio: false,
+  plugins: {
+    legend: { display: false }
+  },
+  scales: {
+    x: { ticks: { color: '#fff' } },
+    y: {
+      beginAtZero: true,
+      ticks: {
+        color: '#fff',
+        precision: 0
+      }
+    }
+  }
+}
 
 
 const popCategoriesData = computed(() => ({
@@ -67,9 +70,7 @@ const popCategoriesOptions = {
   responsive: true,
   maintainAspectRatio: false,
   plugins: {
-    legend: {
-      display: false,
-    },
+    legend: { display: false },
     title: {
       display: true,
       text: 'Popular Categories ( Item Sold ) '
@@ -78,21 +79,28 @@ const popCategoriesOptions = {
   scales: {
     y: {
       beginAtZero: true,
-      ticks: {
-        precision: 0
-      }
+      ticks: { precision: 0 }
     }
   }
 }
 
 
-onMounted(() => {
-  store.getTotals();
-  store.getSales({
+const handleSalesPerPeriod = async () => {
+  await store.getSales({
+    period: period.value,
+    date: selectedDate.value
+  });
+}
+
+watch([period, selectedDate], handleSalesPerPeriod);
+
+onMounted(async () => {
+  await store.getTotals();
+  await store.getSales({
     'period': period.value,
     'date': selectedDate.value
   });
-  store.getPopularCategories();
+  await store.getPopularCategories();
 });
 
 </script>
@@ -129,36 +137,39 @@ onMounted(() => {
 
     <div class="w-full flex flex-col gap-4 mt-6">
 
-      <div class="p-6 rounded bg-slate-400">
-        <div class="flex flex-row-reverse items-center gap-4">
-          <div class="inline-flex items-center justify-center gap-2">
-            <label for="period" class="font-medium text-slate-700">Sales Per:</label>
-            <select
-              id="period"
-              name="period"
-              class="px-2 py-1 rounded border border-slate-300 cursor-pointer"
-              v-model="period"
-            >
-              <option value="day">Day</option>
-              <option value="week">Week</option>
-              <option value="month">Month</option>
-              <option value="Year">Year</option>
-            </select>
-          </div>
-          <div class="inline-flex items-center justify-center gap-2">
-            <label for="selectedDate" class="font-medium text-slate-700">Date</label>
-            <input
-              id="selectedDate"
-              type="date"
-              class="px-2 py-1 rounded border border-slate-300 cursor-pointer"
-              v-model="selectedDate"
-            >
+      <div class="p-6 rounded bg-linear-to-b from-green-900 to-green-700">
+        <div class="mb-4 flex items-center justify-between">
+          <p class="font-semibold tracking-wider text-2xl text-slate-50">Sales per {{ period }}</p>
+          <div class="inline-flex items-center justify-center gap-4">
+            <div class="inline-flex items-center justify-center gap-2">
+              <label for="selected-date" class="font-medium text-slate-100">Date:</label>
+              <input
+                id="selected-date"
+                type="date"
+                class="px-2 py-1 text-slate-100 rounded border border-slate-300 cursor-pointer"
+                v-model="selectedDate"
+              >
+            </div>
+            <div class="inline-flex items-center justify-center gap-2">
+              <label for="period" class="font-medium text-slate-100">Sales Per:</label>
+              <select
+                id="period"
+                name="period"
+                class="px-2 py-1 text-slate-100 rounded border border-slate-300 cursor-pointer"
+                v-model="period"
+              >
+                <option value="Day">Day</option>
+                <option value="Week">Week</option>
+                <option value="Month">Month</option>
+                <option value="Year">Year</option>
+              </select>
+            </div>
           </div>
         </div>
         <Chart
           graph="Line"
-          :data="popCategoriesData"
-          :options="popCategoriesOptions"
+          :data="salesData"
+          :options="salesOptions"
           class="h-112.5"
         />
       </div>

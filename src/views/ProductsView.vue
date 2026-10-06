@@ -170,9 +170,9 @@ const deleteProduct = async (id) => {
 }
 
 
-onMounted(() => {
-  store.getAllProducts();
-  categoriesStore.getAllCategories();
+onMounted(async () => {
+  await store.getAllProducts();
+  await categoriesStore.getAllCategories();
 });
 </script>
 
