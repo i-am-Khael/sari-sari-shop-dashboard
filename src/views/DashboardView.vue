@@ -3,7 +3,7 @@ import { ref, watch, computed, onMounted } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useDashboardStore } from '@/stores/dashboard';
 import { utilities } from '@/composables/utilities';
-import DashboardCard from '@/components/utilities/DashboardCard.vue';
+import DashboardCard from '@/components/dashboard/DashboardCard.vue';
 import Chart from '@/components/utilities/Chart.vue';
 
 const store = useDashboardStore();
@@ -69,20 +69,41 @@ const popCategoriesData = computed(() => ({
 const popCategoriesOptions = {
   responsive: true,
   maintainAspectRatio: false,
+  cutout: 0,
   plugins: {
-    legend: { display: false },
-    title: {
-      display: true,
-      text: 'Popular Categories ( Item Sold ) '
+    legend: {
+      position: 'bottom',
+      labels: {
+        usePointStyle: true,
+        pointStyle: 'circle',
+        padding: 20,
+        color: '#334155'
+      }
+    },
+    tooltip: {
+      backgroundColor: '#0f172a',
+      titleColor: '#ffffff',
+      bodyColor: '#e2e8f0',
+      padding: 12,
+      cornerRadius: 8,
+      displayColors: true,
+      callbacks: {
+        label(context) {
+          const values = context.dataset.data;
+          const total = values.reduce((sum, value) => sum + value, 0);
+          const value = context.raw;
+          const percent = total ? ((value / total) * 100).toFixed(1) : 0;
+          return ` ${context.label}: ${value} (${percent}%)`;
+        }
+      }
     }
   },
-  scales: {
-    y: {
-      beginAtZero: true,
-      ticks: { precision: 0 }
-    }
+  layout: {
+    padding: 12
   }
 }
+
+
 
 
 const handleSalesPerPeriod = async () => {
@@ -175,7 +196,7 @@ onMounted(async () => {
       </div>
 
       <Chart
-        graph="Bar"
+        graph="Pie"
         :data="popCategoriesData"
         :options="popCategoriesOptions"
       />

@@ -177,7 +177,7 @@ onMounted(async () => {
 </script>
 
 <template>
-   <DataTable
+  <DataTable
     :columns="columns"
     :rows="paginatedItems"
     :sortKey="sortKey"

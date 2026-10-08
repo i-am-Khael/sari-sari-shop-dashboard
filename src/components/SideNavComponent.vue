@@ -49,10 +49,21 @@
         class="px-4 py-3 text-sm font-medium group flex items-center gap-3 rounded hover:bg-white/10 hover:text-white transition-all duration-200"
       >
         <FontAwesomeIcon
-          icon="fa-solid fa-layer-group"
+          icon="fa-solid fa-table-list"
           class="w-5 text-blue-300 group-hover:text-white transition"
         />
         <span>Categories</span>
+      </RouterLink>
+      <RouterLink
+        to="/orders"
+        exact-active-class="bg-white text-blue-950 shadow-md"
+        class="px-4 py-3 text-sm font-medium group flex items-center gap-3 rounded hover:bg-white/10 hover:text-white transition-all duration-200"
+      >
+        <FontAwesomeIcon
+          icon="fa-solid fa-layer-group"
+          class="w-5 text-blue-300 group-hover:text-white transition"
+        />
+        <span>Orders</span>
       </RouterLink>
     </nav>
 

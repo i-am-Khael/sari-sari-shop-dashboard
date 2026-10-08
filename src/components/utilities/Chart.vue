@@ -1,5 +1,5 @@
 <script setup>
-import { Bar, Line } from 'vue-chartjs';
+import { Bar, Line, Pie } from 'vue-chartjs';
 
 import {
   Chart as ChartJS,
@@ -8,6 +8,7 @@ import {
   Legend,
   LineElement,
   BarElement,
+  ArcElement,
   PointElement,
   CategoryScale,
   LinearScale
@@ -20,6 +21,7 @@ ChartJS.register(
   Legend,
   LineElement,
   BarElement,
+  ArcElement,
   PointElement,
   CategoryScale,
   LinearScale
@@ -28,8 +30,7 @@ ChartJS.register(
 const props = defineProps({
   graph: {
     type: String,
-    default: 'Line',
-    validator: value => ['Line', 'Bar'].includes(value)
+    default: 'Line'
   },
   data: {
     type: Object,
@@ -48,8 +49,9 @@ const props = defineProps({
 });
 
 const chartComponents = {
+  Bar,
   Line,
-  Bar
+  Pie
 }
 
 </script>

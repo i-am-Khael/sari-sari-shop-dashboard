@@ -24,6 +24,10 @@ const props = defineProps({
   placeholder: {
     type: String,
     default: 'Search...'
+  },
+  hideButton: {
+    type: Boolean,
+    default: true
   }
 });
 
@@ -64,6 +68,7 @@ watch(search, (value) => {
         />
       </div>
       <Button
+        v-if="props.hideButton"
         customClass="px-6 py-2.5 text-sm font-semibold inline-flex items-center justify-center gap-2 rounded shadow-sm text-blue-950 bg-blue-50 hover:bg-blue-900 hover:text-slate-50 cursor-pointer"
         :label="props.label "
         iconName="fa-solid fa-plus"

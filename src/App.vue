@@ -12,7 +12,7 @@
     :class="showSideNav ? 'grid-cols-[300px_1fr]' : 'grid-cols-1'"
   >
     <SideNavComponent v-if="showSideNav"/>
-    <section class="w-full h-screen overflow-scroll p-3">
+    <section class="w-full h-screen overflow-x-hidden p-3">
       <RouterView/>
     </section>
   </main>
