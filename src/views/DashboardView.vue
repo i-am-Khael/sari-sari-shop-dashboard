@@ -8,7 +8,7 @@ import Chart from '@/components/utilities/Chart.vue';
 
 const store = useDashboardStore();
 const { formatMoney } = utilities();
-const { totals, sales, popularCategories } = storeToRefs(store);
+const { totals, sales, popularCategories, orders } = storeToRefs(store);
 
 const today = () => {
   const date = new Date();
@@ -54,6 +54,89 @@ const salesOptions = {
 }
 
 
+const orderData = computed(() => {
+
+  const labels = [
+    { key: 'paid', label: 'Paid' },
+    { key: 'shipped', label: 'Shipped' },
+    { key: 'completed', label: 'Completed' },
+    { key: 'pending', label: 'Pending' },
+    { key: 'cancelled', label: 'Cancelled' }
+  ];
+
+  const order = orders.value?.[0] ?? {};
+
+  return {
+    labels: labels.map(label => label.label),
+    datasets: [
+      {
+        label: 'Status',
+        data: labels.map(label => Number(order[label.key] ?? 0)),
+        backgroundColor: ['#22c55e', '#3b82f6', '#8b5cf6', '#f59e0b', '#ef4444'],
+        borderRadius: 4,
+      },
+    ]
+  }
+});
+
+
+const orderOptions = {
+  responsive: true,
+  maintainAspectRatio: false,
+  plugins: {
+    title: {
+      display: true,
+      text: 'Total orders per status.',
+      color: '#fff',
+      font: {
+        size: 16,
+        wieght: 'bold'
+      }
+    },
+    legend: {
+      display: false
+    },
+    tooltip: {
+      backgroundColor: '#0f172a',
+      titleColor: '#ffffff',
+      bodyColor: '#e2e8f0',
+      padding: 12,
+      cornerRadius: 8,
+      displayColors: true,
+      callbacks: {
+        label: context => ` ${context.parsed.y} orders`
+      }
+    }
+  },
+  scales: {
+    x: {
+      ticks: {
+        color: '#fff',
+        grid: {
+          display: false
+        }
+      }
+    },
+    y: {
+      beginAtZero: true,
+      ticks: {
+        color: '#fff',
+        precision: 0,
+      },
+      title: {
+        display: true,
+        text: 'Number of orders',
+        color: '#fff'
+      }
+    }
+  },
+  layout: {
+    padding: 12
+  }
+}
+
+
+
 const popCategoriesData = computed(() => ({
   labels: popularCategories.value.map(item => item.category),
   datasets: [
@@ -71,6 +154,15 @@ const popCategoriesOptions = {
   maintainAspectRatio: false,
   cutout: 0,
   plugins: {
+    title: {
+      display: true,
+      text: 'Item sold per category.',
+      color: '#334155',
+      font: {
+        size: 16,
+        wieght: 'bold'
+      }
+    },
     legend: {
       position: 'bottom',
       labels: {
@@ -122,6 +214,7 @@ onMounted(async () => {
     'date': selectedDate.value
   });
   await store.getPopularCategories();
+  await store.getOrders();
 });
 
 </script>
@@ -141,7 +234,7 @@ onMounted(async () => {
         iconClass="text-5xl text-pink-300"
         customClass="bg-linear-to-b from-pink-900 to-pink-700"
         :mainText="totals.total_orders"
-        subText="Total Paid Orders"
+        subText="Total Orders"
       />
       <DashboardCard
         iconClass="text-5xl text-purple-300"
@@ -195,11 +288,19 @@ onMounted(async () => {
         />
       </div>
 
-      <Chart
-        graph="Pie"
-        :data="popCategoriesData"
-        :options="popCategoriesOptions"
-      />
+      <div class="w-full grid grid-cols-2 gap-4">
+        <Chart
+          graph="Bar"
+          :data="orderData"
+          :options="orderOptions"
+          class="rounded bg-linear-to-b from-slate-700 to-slate-950"
+        />
+        <Chart
+          graph="Pie"
+          :data="popCategoriesData"
+          :options="popCategoriesOptions"
+        />
+      </div>
 
     </div>
 

@@ -86,6 +86,26 @@ export const useOrderStore = defineStore('useOrderStore', {
       this.orders = results.data;
       return;
 
+    },
+
+
+    async shipOrder(data) {
+
+      const response = await fetch(`${this.apiURI}/orders/ship`, {
+        method: 'PATCH',
+        headers: this.headers,
+        body: JSON.stringify(data)
+      });
+
+      const result = await response.json();
+
+      if (result.status === 200) {
+        this.getAllOrders();
+        return result;
+      }
+
+      return result.errors;
+
     }
 
   }

@@ -11,7 +11,8 @@ export const useDashboardStore = defineStore('useDashboardStore', {
     },
     totals: {},
     sales: [],
-    popularCategories: []
+    popularCategories: [],
+    orders: []
   }),
 
   actions: {
@@ -63,6 +64,23 @@ export const useDashboardStore = defineStore('useDashboardStore', {
       if (result.status !== 200) return result.errors;
 
       this.popularCategories = result.data;
+      return;
+
+    },
+
+
+    async getOrders() {
+
+      const response = await fetch(`${this.apiURI}/dashboard/orders`, {
+        method: 'GET',
+        headers: this.headers
+      });
+
+      const result = await response.json();
+
+      if (result.status !== 200) return result.errors;
+
+      this.orders = result.data;
       return;
 
     }

@@ -27,7 +27,7 @@ const handleOverlay = (event) => {
 </script>
 
 <template>
-  <section
+  <div
     class="w-full h-full absolute overflow-x-auto top-0 left-0 z-50 flex items-center justify-center backdrop-blur-xs bg-slate-950/40"
     @click="handleOverlay"
   >
@@ -60,5 +60,5 @@ const handleOverlay = (event) => {
       </DataTable>
     </div>
 
-  </section>
+  </div>
 </template>
