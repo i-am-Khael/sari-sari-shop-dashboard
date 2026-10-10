@@ -107,7 +107,7 @@ const updateFile = (event) => {
     </label>
 
     <input
-      v-if="props.type === 'text' || props.type === 'color'"
+      v-if="props.type === 'text' || props.type === 'password' || props.type === 'color'"
       :class="[props.inputClass, { 'text-red-500! border-red-500!': !!props.hasError }]"
       :id="props.id"
       :type="props.type"
@@ -163,6 +163,10 @@ const updateFile = (event) => {
       @input="updateValue"
     ></textarea>
 
-    <Errors v-if="props.hasError" :class="props.errorClass" :msg="props.errorMsg"/>
+    <Errors
+      v-if="props.hasError"
+      :class="props.errorClass"
+      :msg="props.errorMsg"
+    />
   </div>
 </template>
