@@ -1,7 +1,6 @@
 <script setup>
 import { ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { storeToRefs } from 'pinia';
 import { useAuthStore } from '@/stores/auth';
 import TextInputs from '@/components/utilities/TextInputs.vue';
 
@@ -31,6 +30,8 @@ const handleLogin = async () => {
     return;
   }
 
+  await router.push({ name: 'dashboard' });
+
 }
 
 </script>
@@ -40,7 +41,11 @@ const handleLogin = async () => {
 
     <div class="w-125 p-6 rounded shadow-lg bg-slate-300">
 
-      <form class="flex flex-col gap-4">
+      <form
+        method="POST"
+        class="flex flex-col gap-4"
+        @submit="handleLogin"
+      >
 
         <TextInputs
           id="username"

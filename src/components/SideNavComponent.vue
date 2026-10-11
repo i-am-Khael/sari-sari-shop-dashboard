@@ -1,9 +1,19 @@
 <script setup>
-  import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import { useRouter } from 'vue-router';
+import { useAuthStore } from '@/stores/auth';
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+
+const router = useRouter();
+const auth = useAuthStore();
+
+const handleLogout = async () => {
+  await auth.logout();
+  router.push({ name: 'login' });
+}
 </script>
 
 <template>
-  <aside class="h-screen px-4 py-6 flex flex-col shrink-0 bg-linear-to-b from-blue-950 via-blue-900 to-blue-800 text-white shadow-xl">
+  <aside class="h-screen px-4 py-6 flex flex-col shrink-0 bg-linear-to-b from-blue-950 via-blue-900 to-blue-800 text-white shadow-xl cursor-pointer">
 
     <div class="mb-8 px-2 pb-6 border-b border-blue-800/70">
       <div class="flex items-center gap-3">
@@ -67,8 +77,8 @@
       </RouterLink>
     </nav>
 
-     <!-- <div class="mt-auto">
-      <RouterLink
+    <div class="mt-auto">
+      <!-- <RouterLink
         to="/profile"
         class="px-4 py-3 text-sm font-medium group flex items-center gap-3 rounded hover:bg-white/10 hover:text-white transition-all duration-200"
       >
@@ -77,8 +87,18 @@
           class="w-5 text-blue-300 group-hover:text-white transition"
         />
         <span>Profile</span>
-      </RouterLink>
-    </div> -->
+      </RouterLink> -->
+      <div
+        class="px-4 py-3 text-sm font-medium group flex items-center gap-3 rounded hover:bg-white/10 hover:text-white transition-all duration-200"
+        @click="handleLogout"
+      >
+        <FontAwesomeIcon
+          icon="fa-solid fa-solid fa-arrow-right-from-bracket"
+          class="w-5 text-blue-300 group-hover:text-white transition"
+        />
+        <span>Logout</span>
+      </div>
+    </div>
 
   </aside>
 </template>

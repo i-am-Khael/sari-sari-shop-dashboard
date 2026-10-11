@@ -4,15 +4,13 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 const props = defineProps({
   icon: {
     type: String,
-    default: 'fa-solid fa-box-open',
-    required: true
+    default: 'fa-solid fa-box-open'
   },
   iconColor: {
-    type: String,
-    required: true
+    type: String
   },
   mainText: {
-    type: String,
+    type: [ String, Number ],
     required: true
   },
   subText: {
