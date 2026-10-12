@@ -60,10 +60,9 @@ export const useAuthStore = defineStore('useAuthStore', {
       });
 
       const result = await response.json()
-
       this.isAuth = result.data.authenticated;
 
-      return result.data;
+      return result.data.authenticated;
 
     }
 

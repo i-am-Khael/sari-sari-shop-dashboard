@@ -110,7 +110,7 @@ const setSortIcon = (column) => {
   					</td>
   					<td
   					  v-if="$slots.actions"
-  						class="p-3"
+  						class="w-full p-3 inline-flex items-center justify-center"
   					>
   					  <slot name="actions" :row="row"/>
   					</td>

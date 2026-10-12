@@ -57,7 +57,7 @@ const handleShipOrder = async () => {
 
   const result = await store.shipOrder(params);
 
-  if (result.status === 200) shipOrderModal = false;
+  if (result.status === 200) shipOrderModal.value = false;
 
 }
 

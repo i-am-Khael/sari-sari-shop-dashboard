@@ -136,13 +136,13 @@ const orderOptions = {
 }
 
 
-
+const randColor = () => `hsl(${Math.floor(Math.random() * 360)}, 70%, 60%)`;
 const popCategoriesData = computed(() => ({
   labels: popularCategories.value.map(item => item.category),
   datasets: [
     {
       data: popularCategories.value.map(item => Number(item.total_items_sold)),
-      backgroundColor: popularCategories.value.map(item => item.color),
+      backgroundColor: popularCategories.value.map(() => randColor()),
       borderColor: 'gray'
     },
   ]

@@ -42,7 +42,8 @@ export const useOrderStore = defineStore('useOrderStore', {
       },
       {
         'key': 'order_date',
-        'label': 'Order Date'
+        'label': 'Order Date',
+        'sortable': true
       },
     ],
     orderItemColumns: [

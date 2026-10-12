@@ -19,9 +19,9 @@ const description = ref('');
 const columns = store.columns;
 const icons = store.icons;
 const icon = ref('');
-const color = ref('');
 const showAddModal = ref(false);
 const errors = ref(null);
+const storage = import.meta.env.VITE_API_STORAGE;
 
 const {
   currentPage,
@@ -47,14 +47,12 @@ const editModal = (data) => {
   showAddModal.value = true;
   categoryId.value = data.id;
   icon.value = data.icon;
-  color.value = data.color;
   category.value = data.category;
   description.value = data.description;
 }
 
 const closeAddModal = () => {
   icon.value = '';
-  color.value = '';
   categoryId.value = '';
   category.value = '';
   description.value = '';
@@ -66,7 +64,6 @@ const addCategory = async () => {
 
   const data = {
     'icon': icon.value,
-    'color': color.value,
     'category': category.value,
     'description': description.value
   }
@@ -85,7 +82,6 @@ const updateCategory = async () => {
   const data = {
     'id': categoryId.value,
     'icon': icon.value,
-    'color': color.value,
     'category': category.value,
     'description': description.value
   }
@@ -127,13 +123,10 @@ onMounted(async () => {
     </template>
 
     <template #category="{ row }">
-      <div v-if="row.icon" class="w-11 h-11 inline-flex items-center justify-center">
-        <FontAwesomeIcon
-          :icon="row.icon"
-          :style="{ color: row.color }"
-        />
+      <div v-if="row.icon" class="inline-flex items-center justify-center gap-3">
+        <img :src="`${storage}svg/${row.icon}`" class="w-8 h-8">
+        <span>{{ row.category }}</span>
       </div>
-      <span>{{ row.category }}</span>
     </template>
 
     <template #actions="{ row }">
@@ -181,11 +174,7 @@ onMounted(async () => {
       <div class="w-full inline-flex items-center gap-1.5">
         <div class="w-full inline-flex items-center gap-1.5">
           <div v-if="icon" class="w-11 h-11 flex items-center justify-center">
-            <FontAwesomeIcon
-              class="text-5xl"
-              :icon="icon"
-              :style="{ color: color }"
-            />
+            <img :src="`${storage}svg/${icon}`" class="w-11 h-11">
           </div>
           <TextInputs
             id="icon"
@@ -198,16 +187,6 @@ onMounted(async () => {
             v-model="icon"
           />
         </div>
-
-        <TextInputs
-          id="color"
-          type="color"
-          label="Icon Color"
-          placeholder="Icon Color"
-          :hasError="errors?.color"
-          :errorMsg="errors?.color"
-          v-model="color"
-        />
       </div>
 
       <TextInputs
