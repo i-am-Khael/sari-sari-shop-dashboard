@@ -10,6 +10,7 @@ import Pagination from '@/components/utilities/Pagination.vue';
 import FormModal from '@/components/utilities/FormModal.vue';
 import TextInputs from '@/components/utilities/TextInputs.vue';
 import Button from '@/components/utilities/Button.vue';
+import Toast from '@/components/utilities/Toast.vue';
 
 const store = useCategoriesStore();
 const { categories } = storeToRefs(store);
@@ -21,6 +22,9 @@ const icons = store.icons;
 const icon = ref('');
 const showAddModal = ref(false);
 const errors = ref(null);
+const showToast = ref(false);
+const toastType = ref('success');
+const toastMsg = ref('');
 const storage = import.meta.env.VITE_API_STORAGE;
 
 const {
@@ -75,7 +79,12 @@ const addCategory = async () => {
     return;
   }
 
+  const msg = results.data.msg ?? results.errors.msg;
+  const type = results.data.msg ? 'success' : 'error';
+
   closeAddModal();
+  setToast(type, msg);
+
 }
 
 const updateCategory = async () => {
@@ -93,7 +102,27 @@ const updateCategory = async () => {
     return;
   }
 
+  const msg = results.data.msg ?? results.errors.msg;
+  const type = results.data.msg ? 'success' : 'error';
+
   closeAddModal();
+  setToast(type, msg);
+
+}
+
+
+const setToast = (type, msg) => {
+
+  showToast.value = true;
+  toastType.value = type;
+  toastMsg.value = msg;
+
+  setTimeout(() => {
+    showToast.value = false;
+    toastType.value = '';
+    toastMsg.value = '';
+  }, 2500);
+
 }
 
 onMounted(async () => {
@@ -221,5 +250,11 @@ onMounted(async () => {
       />
     </template>
   </FormModal>
+
+  <Toast
+    :show="showToast"
+    :type="toastType"
+    :text="toastMsg"
+  />
 
 </template>

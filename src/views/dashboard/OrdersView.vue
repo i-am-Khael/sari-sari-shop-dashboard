@@ -9,6 +9,7 @@ import TableHeader from '@/components/utilities/TableHeader.vue';
 import Pagination from '@/components/utilities/Pagination.vue';
 import OrderItems from '@/components/orders/OrderItems.vue';
 import Button from '@/components/utilities/Button.vue';
+import Toast from '@/components/utilities/Toast.vue';
 
 const store = useOrderStore();
 const { orders, columns, orderItemColumns } = storeToRefs(store);
@@ -32,6 +33,9 @@ const shipOrderModal = ref(false)
 const shipOrder = ref(null);
 const viewOrders = ref(false);
 const orderItems = ref({});
+const showToast = ref(false);
+const toastType = ref('success');
+const toastMsg = ref('');
 
 const viewOrderItems = (data) => {
   orderItems.value = {
@@ -57,10 +61,27 @@ const handleShipOrder = async () => {
 
   const result = await store.shipOrder(params);
 
-  if (result.status === 200) shipOrderModal.value = false;
+  if (result.status === 200) {
+    shipOrderModal.value = false;
+    setToast('success', result.data.msg);
+  }
 
 }
 
+
+const setToast = (type, msg) => {
+
+  showToast.value = true;
+  toastType.value = type;
+  toastMsg.value = msg;
+
+  setTimeout(() => {
+    showToast.value = false;
+    toastType.value = '';
+    toastMsg.value = '';
+  }, 2500);
+
+}
 
 onMounted(async () => {
   await store.getAllOrders();
@@ -151,6 +172,12 @@ onMounted(async () => {
         </div>
       </div>
     </div>
+
+    <Toast
+      :show="showToast"
+      :type="toastType"
+      :text="toastMsg"
+    />
 
 	</section>
 </template>

@@ -11,6 +11,7 @@ import Pagination from '@/components/utilities/Pagination.vue';
 import FormModal from '@/components/utilities/FormModal.vue';
 import TextInputs from '@/components/utilities/TextInputs.vue';
 import Button from '@/components/utilities/Button.vue';
+import Toast from '@/components/utilities/Toast.vue';
 
 const path = import.meta.env.VITE_API_STORAGE;
 const store = useProductsStore();
@@ -29,6 +30,9 @@ const featured = ref('');
 const image = ref(null);
 const preview = ref(null);
 const errors = ref(null);
+const showToast = ref(false);
+const toastType = ref('success');
+const toastMsg = ref('');
 
 const {
   currentPage,
@@ -90,11 +94,15 @@ const addProduct = async () => {
   const results = await store.addProduct(data);
 
   if (results.status !== 201) {
-    errors.value = results.errors;
+    errors.value = results.errors ?? { file: results.msg };
     return;
   }
 
+  const msg = results.data.msg ?? results.errors.msg;
+  const type = results.data.msg ? 'success' : 'error';
+
   closeModal();
+  setToast(type, msg);
 
 }
 
@@ -128,12 +136,17 @@ const updateProduct = async () => {
 
   const results = await store.updateProduct(data);
 
+
   if (results.status !== 200) {
-    errors.value = results.errors;
+    errors.value = results.errors ?? { file: results.msg };
     return;
   }
 
+  const msg = results.data.msg ?? results.errors.msg;
+  const type = results.data.msg ? 'success' : 'error';
+
   closeModal();
+  setToast(type, msg);
 
 }
 
@@ -169,6 +182,20 @@ const deleteProduct = async (id) => {
   await store.getAllProducts();
 }
 
+
+const setToast = (type, msg) => {
+
+  showToast.value = true;
+  toastType.value = type;
+  toastMsg.value = msg;
+
+  setTimeout(() => {
+    showToast.value = false;
+    toastType.value = '';
+    toastMsg.value = '';
+  }, 2500);
+
+}
 
 onMounted(async () => {
   await store.getAllProducts();
@@ -358,5 +385,11 @@ onMounted(async () => {
     </template>
 
   </FormModal>
+
+  <Toast
+    :show="showToast"
+    :type="toastType"
+    :text="toastMsg"
+  />
 
 </template>

@@ -226,25 +226,25 @@ onMounted(async () => {
         icon="fa-solid fa-sack-dollar"
         iconClass="text-5xl text-green-400"
         customClass="bg-linear-to-b from-green-900 to-green-700"
-        :mainText="`$${formatMoney(totals.total_sales)}`"
+        :mainText="`$${formatMoney(totals.total_sales) ?? 0}`"
         subText="Total Sales"
       />
       <DashboardCard
         icon="fa-solid fa-hand-holding-dollar"
         iconClass="text-5xl text-pink-300"
         customClass="bg-linear-to-b from-pink-900 to-pink-700"
-        :mainText="totals.total_orders"
+        :mainText="totals.total_orders ?? 0"
         subText="Total Orders"
       />
       <DashboardCard
         iconClass="text-5xl text-purple-300"
         customClass="bg-linear-to-b from-purple-900 to-purple-700"
-        :mainText="totals.total_products"
+        :mainText="totals.total_products ?? 0"
         subText="Total Products"
       />
       <DashboardCard
         icon="fa-solid fa-table-list"
-        :mainText="totals.total_categories"
+        :mainText="totals.total_categories ?? 0"
         subText="Total Categories"
       />
     </div>
