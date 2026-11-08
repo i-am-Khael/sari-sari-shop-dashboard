@@ -296,10 +296,14 @@ onMounted(async () => {
           class="rounded bg-linear-to-b from-slate-700 to-slate-950"
         />
         <Chart
+          v-if="popularCategories.length !== 0"
           graph="Pie"
           :data="popCategoriesData"
           :options="popCategoriesOptions"
         />
+        <div v-else class="w-full h-full flex items-center justify-center rounded bg-slate-100">
+          <p>No records found.</p>
+        </div>
       </div>
 
     </div>

@@ -115,7 +115,7 @@ const editProduct = (data) => {
   stock.value = data.stock;
   description.value = data.description;
   featured.value = data.featured;
-  preview.value = data.filename ? `${path}products/${data.filename}` : null;
+  preview.value = data.file ? `${path}products/${data.file}` : null;
   image.value = null;
   showModal.value = true;
 }
@@ -129,7 +129,7 @@ const updateProduct = async () => {
   data.append('price', price.value);
   data.append('stock', stock.value);
   data.append('description', description.value);
-  data.append('category', category.value);
+  data.append('category_id', category.value);
   data.append('featured', featured.value);
 
   if (image.value instanceof File) data.append('file', image.value);
@@ -159,7 +159,7 @@ const handleIsFeatured = async (rowData, event) => {
   data.append('price', rowData.price);
   data.append('stock', rowData.stock);
   data.append('description', rowData.description);
-  data.append('category', rowData.category_id);
+  data.append('category_id', rowData.category_id);
   data.append('featured', featured);
 
   const results = await store.updateProduct(data);
@@ -168,18 +168,6 @@ const handleIsFeatured = async (rowData, event) => {
     errors.value = results.errors;
     return;
   }
-}
-
-
-const deleteProduct = async (id) => {
-  const results = await store.deleteProduct(id);
-
-  if (results.status !== 200) {
-    errors.value = results.errors;
-    return;
-  }
-
-  await store.getAllProducts();
 }
 
 
@@ -223,10 +211,10 @@ onMounted(async () => {
       />
     </template>
 
-    <template #filename="{ row }">
-      <img
+    <template #file="{ row }">
+       <img
         class="w-15 h-15"
-        :src="row.filename ? `${path}products/${row.filename}` : `${path}default.png`"
+        :src="`${path}products/${row.file}`"
         :alt="row.product"
       >
     </template>
@@ -244,7 +232,7 @@ onMounted(async () => {
     </template>
 
     <template #actions="{ row }">
-      <div class="flex items-center justify-center gap-3">
+      <div class="w-full h-full flex items-center justify-center gap-3">
         <button
           type="button"
           aria-label="Edit a product."

@@ -7,7 +7,8 @@ export const useDashboardStore = defineStore('useDashboardStore', {
     apiKEY: import.meta.env.VITE_API_KEY,
     headers: {
       'Content-Type': 'application/json',
-      'X-API-KEY': import.meta.env.VITE_API_KEY
+      'Authorization': `Bearer ${sessionStorage.getItem('bearer')}`,
+      'X-CSRF-Token': sessionStorage.getItem('csrf')
     },
     totals: {},
     sales: [],
@@ -19,9 +20,10 @@ export const useDashboardStore = defineStore('useDashboardStore', {
 
     async getTotals() {
 
-      const response = await fetch(`${this.apiURI}/dashboard/totals`, {
+      const response = await fetch(`${this.apiURI}/totals`, {
         method: 'GET',
-        headers: this.headers
+        headers: this.headers,
+        credentials: 'include'
       });
 
       const result = await response.json();
@@ -36,9 +38,10 @@ export const useDashboardStore = defineStore('useDashboardStore', {
 
     async getSales(data) {
 
-      const response = await fetch(`${this.apiURI}/dashboard/sales`, {
+      const response = await fetch(`${this.apiURI}/sales`, {
         method: 'POST',
         headers: this.headers,
+        credentials: 'include',
         body: JSON.stringify(data)
       });
 
@@ -54,9 +57,10 @@ export const useDashboardStore = defineStore('useDashboardStore', {
 
     async getPopularCategories() {
 
-      const response = await fetch(`${this.apiURI}/dashboard/popular-categories`, {
+      const response = await fetch(`${this.apiURI}/categories/popular`, {
         method: 'GET',
-        headers: this.headers
+        headers: this.headers,
+        credentials: 'include'
       });
 
       const result = await response.json();
@@ -71,9 +75,10 @@ export const useDashboardStore = defineStore('useDashboardStore', {
 
     async getOrders() {
 
-      const response = await fetch(`${this.apiURI}/dashboard/orders`, {
+      const response = await fetch(`${this.apiURI}/orders`, {
         method: 'GET',
-        headers: this.headers
+        headers: this.headers,
+        credentials: 'include'
       });
 
       const result = await response.json();

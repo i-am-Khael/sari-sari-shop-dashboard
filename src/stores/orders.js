@@ -7,7 +7,8 @@ export const useOrderStore = defineStore('useOrderStore', {
     apiKEY: import.meta.env.VITE_API_KEY,
     headers: {
       'Content-Type': 'application/json',
-      'X-API-KEY': import.meta.env.VITE_API_KEY
+      'Authorization': `Bearer ${sessionStorage.getItem('bearer')}`,
+      'X-CSRF-Token': sessionStorage.getItem('csrf')
     },
     orders: [],
     columns: [
@@ -77,7 +78,8 @@ export const useOrderStore = defineStore('useOrderStore', {
 
       const response = await fetch(`${this.apiURI}/orders/all`, {
         method: 'GET',
-        headers: this.headers
+        headers: this.headers,
+        credentials: 'include'
       });
 
       const results = await response.json();
@@ -95,6 +97,7 @@ export const useOrderStore = defineStore('useOrderStore', {
       const response = await fetch(`${this.apiURI}/orders/ship`, {
         method: 'PATCH',
         headers: this.headers,
+        credentials: 'include',
         body: JSON.stringify(data)
       });
 

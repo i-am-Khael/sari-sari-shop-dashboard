@@ -7,7 +7,8 @@ export const useCategoriesStore = defineStore('useCategoriesStore', {
     apiKEY: import.meta.env.VITE_API_KEY,
     headers: {
       'Content-Type': 'application/json',
-      'X-API-KEY': import.meta.env.VITE_API_KEY
+      'Authorization': `Bearer ${sessionStorage.getItem('bearer')}`,
+      'X-CSRF-Token': sessionStorage.getItem('csrf')
     },
     categories: [],
     columns: [
@@ -115,7 +116,8 @@ export const useCategoriesStore = defineStore('useCategoriesStore', {
 
       const response = await fetch(`${this.apiURI}/categories/all`, {
         method: 'GET',
-        headers: this.headers
+        headers: this.headers,
+        credentials: 'include'
       });
 
       const results = await response.json();
@@ -129,6 +131,7 @@ export const useCategoriesStore = defineStore('useCategoriesStore', {
       const response = await fetch(`${this.apiURI}/categories/add`, {
         method: 'POST',
         headers: this.headers,
+        credentials: 'include',
         body: JSON.stringify(data)
       });
 
@@ -145,6 +148,7 @@ export const useCategoriesStore = defineStore('useCategoriesStore', {
       const response = await fetch(`${this.apiURI}/categories/update`, {
         method: 'PATCH',
         headers: this.headers,
+        credentials: 'include',
         body: JSON.stringify(data)
       });
 

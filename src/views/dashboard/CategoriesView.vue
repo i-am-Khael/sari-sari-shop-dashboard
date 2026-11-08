@@ -159,7 +159,7 @@ onMounted(async () => {
     </template>
 
     <template #actions="{ row }">
-      <div class="inline-flex items-center justify-center gap-3">
+      <div class="w-full inline-flex items-center justify-center gap-3">
         <button
           type="button"
           aria-label="Edit a category."

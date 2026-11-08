@@ -7,13 +7,14 @@ export const useProductsStore = defineStore('useProductsStore', {
     apiKEY: import.meta.env.VITE_API_KEY,
     headers: {
       'Content-Type': 'application/json',
-      'X-API-KEY': import.meta.env.VITE_API_KEY
+      'Authorization': `Bearer ${sessionStorage.getItem('bearer')}`,
+      'X-CSRF-Token': sessionStorage.getItem('csrf')
     },
     errors: [],
     products: [],
     columns: [
       {
-        'key': 'filename',
+        'key': 'file',
         'label': 'Image'
       },
       {
@@ -54,9 +55,10 @@ export const useProductsStore = defineStore('useProductsStore', {
 
     async getAllProducts() {
 
-      const response = await fetch(`${this.apiURI}/products/all`, {
+      const response = await fetch(`${this.apiURI}/products`, {
         method: 'GET',
-        headers: this.headers
+        headers: this.headers,
+        credentials: 'include'
       });
 
       const results = await response.json();
@@ -70,9 +72,10 @@ export const useProductsStore = defineStore('useProductsStore', {
       const response = await fetch(`${this.apiURI}/products/add`, {
         method: 'POST',
         headers: {
-          'Accept': 'application/json',
-          'X-API-KEY': this.apiKEY
+          'Authorization': `Bearer ${sessionStorage.getItem('bearer')}`,
+          'X-CSRF-Token': sessionStorage.getItem('csrf')
         },
+        credentials: 'include',
         body: data
       });
 
@@ -89,9 +92,10 @@ export const useProductsStore = defineStore('useProductsStore', {
       const response = await fetch(`${this.apiURI}/products/update`, {
         method: 'POST',
         headers: {
-          'Accept': 'application/json',
-          'X-API-KEY': this.apiKEY
+          'Authorization': `Bearer ${sessionStorage.getItem('bearer')}`,
+          'X-CSRF-Token': sessionStorage.getItem('csrf')
         },
+        credentials: 'include',
         body: data
       });
 
@@ -105,15 +109,16 @@ export const useProductsStore = defineStore('useProductsStore', {
 
     async deleteProduct(id) {
 
-      const response = await fetch(`${this.apiURI}/products/delete`, {
-        method: 'DELETE',
-        headers: this.headers,
-        body: JSON.stringify({ 'id': id })
-      });
+      // const response = await fetch(`${this.apiURI}/products/delete`, {
+      //   method: 'DELETE',
+      //   headers: this.headers,
+      //   credentials: 'include',
+      //   body: JSON.stringify({ 'id': id })
+      // });
 
-      const results = await response.json();
+      // const results = await response.json();
 
-      return results;
+      // return results;
 
     }
 

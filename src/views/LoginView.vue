@@ -3,6 +3,7 @@ import { ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useAuthStore } from '@/stores/auth';
 import TextInputs from '@/components/utilities/TextInputs.vue';
+import Toast from '@/components/utilities/Toast.vue';
 
 const route = useRoute();
 const router = useRouter();
@@ -21,7 +22,7 @@ const handleLogin = async () => {
   });
 
   if (result.status !== 200) {
-    errors.value = result.errors;
+    errors.value = result;
 
     setTimeout(() => {
       errors.value = null;
@@ -44,7 +45,7 @@ const handleLogin = async () => {
       <form
         method="POST"
         class="flex flex-col gap-4"
-        @submit="handleLogin"
+        @submit.prevent="handleLogin"
       >
 
         <TextInputs
@@ -54,8 +55,8 @@ const handleLogin = async () => {
           placeholder="Username"
           labelClass="uppercase font-semibold text-blue-900"
           inputClass="w-full px-4 py-2 text-slate-700 rounded border border-blue-900 focus:border-blue-600 outline-none"
-          :hasError="errors?.username || errors?.msg"
-          :errorMsg="errors?.username || errors?.msg"
+          :hasError="errors?.username || errors?.error"
+          :errorMsg="errors?.username || errors?.error"
           :required="true"
           v-model="username"
         />
@@ -67,16 +68,15 @@ const handleLogin = async () => {
           placeholder="Password"
           labelClass="uppercase font-semibold text-blue-900"
           inputClass="w-full px-4 py-2 text-slate-700 rounded border border-blue-900 focus:border-blue-600 outline-none"
-          :hasError="errors?.password || errors?.msg"
-          :errorMsg="errors?.password || errors?.msg"
+          :hasError="errors?.password || errors?.error"
+          :errorMsg="errors?.password || errors?.error"
           :required="true"
           v-model="password"
         />
 
         <button
-          type="button"
+          type="submit"
           class="w-full px-4 py-2 uppercase font-semibold tracking-wide text-slate-200 rounded bg-linear-to-b from-blue-900 to-blue-700 hover:from-blue-700 hover:to-blue-500 cursor-pointer"
-          @click="handleLogin"
         >
           Login
         </button>
@@ -84,6 +84,8 @@ const handleLogin = async () => {
       </form>
 
     </div>
+
+    <Toast :show="errors?.msg ?? false" type="error" :text="errors?.msg ?? ''" />
 
   </section>
 </template>
