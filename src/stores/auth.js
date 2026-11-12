@@ -4,7 +4,6 @@ export const useAuthStore = defineStore('useAuthStore', {
 
   state: () => ({
     uri: import.meta.env.VITE_API_URI,
-    key: import.meta.env.VITE_API_KEY,
     isAuth: false
   }),
 
@@ -60,7 +59,7 @@ export const useAuthStore = defineStore('useAuthStore', {
 
       if (!response.ok) return result.errors;
 
-      sessionStorage.setItem('id', result.data.profile.id);
+      sessionStorage.setItem('id', result.data.id);
       sessionStorage.setItem('bearer', result.data.bearer);
       sessionStorage.setItem('csrf', result.data.csrf);
 

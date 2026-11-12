@@ -7,8 +7,8 @@ export const useProductsStore = defineStore('useProductsStore', {
     apiKEY: import.meta.env.VITE_API_KEY,
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${sessionStorage.getItem('bearer')}`,
-      'X-CSRF-Token': sessionStorage.getItem('csrf')
+      'Authorization': '',
+      'X-CSRF-Token': ''
     },
     errors: [],
     products: [],
@@ -54,6 +54,9 @@ export const useProductsStore = defineStore('useProductsStore', {
   actions: {
 
     async getAllProducts() {
+
+      this.headers['Authorization'] = `Bearer ${sessionStorage.getItem('bearer')}`;
+      // this.headers['X-CSRF-Token'] = sessionStorage.getItem('csrf');
 
       const response = await fetch(`${this.apiURI}/products`, {
         method: 'GET',

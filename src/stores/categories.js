@@ -7,8 +7,8 @@ export const useCategoriesStore = defineStore('useCategoriesStore', {
     apiKEY: import.meta.env.VITE_API_KEY,
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${sessionStorage.getItem('bearer')}`,
-      'X-CSRF-Token': sessionStorage.getItem('csrf')
+      'Authorization': '',
+      'X-CSRF-Token': ''
     },
     categories: [],
     columns: [
@@ -114,6 +114,9 @@ export const useCategoriesStore = defineStore('useCategoriesStore', {
 
     async getAllCategories() {
 
+      this.headers['Authorization'] = `Bearer ${sessionStorage.getItem('bearer')}`;
+      // this.headers['X-CSRF-Token'] = sessionStorage.getItem('csrf');
+
       const response = await fetch(`${this.apiURI}/categories/all`, {
         method: 'GET',
         headers: this.headers,
@@ -127,6 +130,9 @@ export const useCategoriesStore = defineStore('useCategoriesStore', {
     },
 
     async addCategory(data) {
+
+      this.headers['Authorization'] = `Bearer ${sessionStorage.getItem('bearer')}`;
+      this.headers['X-CSRF-Token'] = sessionStorage.getItem('csrf');
 
       const response = await fetch(`${this.apiURI}/categories/add`, {
         method: 'POST',
@@ -144,6 +150,9 @@ export const useCategoriesStore = defineStore('useCategoriesStore', {
     },
 
     async updateCategory(data) {
+
+      this.headers['Authorization'] = `Bearer ${sessionStorage.getItem('bearer')}`;
+      this.headers['X-CSRF-Token'] = sessionStorage.getItem('csrf');
 
       const response = await fetch(`${this.apiURI}/categories/update`, {
         method: 'PATCH',

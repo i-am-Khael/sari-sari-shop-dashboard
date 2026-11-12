@@ -7,8 +7,8 @@ export const useOrderStore = defineStore('useOrderStore', {
     apiKEY: import.meta.env.VITE_API_KEY,
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${sessionStorage.getItem('bearer')}`,
-      'X-CSRF-Token': sessionStorage.getItem('csrf')
+      'Authorization': '',
+      'X-CSRF-Token': ''
     },
     orders: [],
     columns: [
@@ -76,6 +76,9 @@ export const useOrderStore = defineStore('useOrderStore', {
 
     async getAllOrders() {
 
+      this.headers['Authorization'] = `Bearer ${sessionStorage.getItem('bearer')}`;
+      // this.headers['X-CSRF-Token'] = sessionStorage.getItem('csrf');
+
       const response = await fetch(`${this.apiURI}/orders/all`, {
         method: 'GET',
         headers: this.headers,
@@ -93,6 +96,9 @@ export const useOrderStore = defineStore('useOrderStore', {
 
 
     async shipOrder(data) {
+
+      this.headers['Authorization'] = `Bearer ${sessionStorage.getItem('bearer')}`;
+      this.headers['X-CSRF-Token'] = sessionStorage.getItem('csrf');
 
       const response = await fetch(`${this.apiURI}/orders/ship`, {
         method: 'PATCH',
