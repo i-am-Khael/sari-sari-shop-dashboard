@@ -1,6 +1,14 @@
 
 # E-Store-Dashboard
-- dashboard for the e-store-shop
+- dashboard for the sari-sari-shop
+
+### Modules/Features
+- View Dashboard
+- Add/Update Category
+- Add/Update Product
+- View Orders
+- Ship Orders
+- will add more..
 
 ## Tech Used ( currently )
 - [VueJS Framework](https://vuejs.org)
@@ -8,4 +16,4 @@
 - [Pinia](https://pinia.vuejs.org) for data management.
 - [Tailwind CSS](https://tailwindcss.com) for styling.
 - [FontAwesome Icons](https://fontawesome.com/icons) for free icons.
-- [E-Store-API](https://github.com/i-am-Khael/e-store-api) for the APIs.
+- [Sari-Sari-Shop-API](https://github.com/i-am-Khael/sari-sari-shop-api) for the APIs.
