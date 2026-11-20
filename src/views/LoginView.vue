@@ -38,7 +38,13 @@ const handleLogin = async () => {
 </script>
 
 <template>
-  <section class="w-dvw h-dvh flex items-center justify-center bg-linear-to-b from-blue-700 to-blue-900">
+  <section class="w-dvw h-dvh flex flex-col items-center justify-center bg-linear-to-b from-blue-700 to-blue-900">
+
+    <div class="max-w-60 mb-6 p-6 rounded bg-blue-100">
+      <p class="mb-2">Use this account to login.</p>
+      <p>Username: <span class="font-bold">dash</span></p>
+      <p>Password: <span class="font-bold">password</span></p>
+    </div>
 
     <div class="w-125 p-6 rounded shadow-lg bg-slate-300">
 

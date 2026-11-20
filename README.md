@@ -1,5 +1,5 @@
 
-# E-Store-Dashboard
+# Sari-Sari-Shop Dashboard
 - dashboard for the sari-sari-shop
 
 ### Modules/Features
@@ -17,3 +17,6 @@
 - [Tailwind CSS](https://tailwindcss.com) for styling.
 - [FontAwesome Icons](https://fontawesome.com/icons) for free icons.
 - [Sari-Sari-Shop-API](https://github.com/i-am-Khael/sari-sari-shop-api) for the APIs.
+
+# Screenshot
+![Sari-Sari-Shop Dashboard](image.png)
