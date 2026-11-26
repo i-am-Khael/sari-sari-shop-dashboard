@@ -36,7 +36,7 @@ export const useAuthStore = defineStore('useAuthStore', {
 
       if (!response.ok) throw new error('could not load CSRF token');
 
-      sessionStorage.setItem('csrf', result.data.csrf);
+      sessionStorage.setItem('dash', result.data.csrf);
 
       return result.data.csrf ?? '';
 
@@ -49,7 +49,7 @@ export const useAuthStore = defineStore('useAuthStore', {
         method: 'POST',
         headers: {
           "Content-Type": "application/json",
-          "X-CSRF-Token": sessionStorage.getItem('csrf')
+          "X-CSRF-Token": sessionStorage.getItem('dash')
         },
         credentials: 'include',
         body: JSON.stringify(data)
@@ -61,7 +61,7 @@ export const useAuthStore = defineStore('useAuthStore', {
 
       sessionStorage.setItem('id', result.data.id);
       sessionStorage.setItem('bearer', result.data.bearer);
-      sessionStorage.setItem('csrf', result.data.csrf);
+      sessionStorage.setItem('dash', result.data.csrf);
 
       return result;
 
@@ -75,7 +75,7 @@ export const useAuthStore = defineStore('useAuthStore', {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${sessionStorage.getItem('bearer')}`,
-          'X-CSRF-Token': sessionStorage.getItem('csrf')
+          'X-CSRF-Token': sessionStorage.getItem('dash')
         },
         credentials: 'include'
       });

@@ -21,7 +21,7 @@ export const useDashboardStore = defineStore('useDashboardStore', {
     async getTotals() {
 
       this.headers['Authorization'] = `Bearer ${sessionStorage.getItem('bearer')}`;
-      // this.headers['X-CSRF-Token'] = sessionStorage.getItem('csrf');
+      // this.headers['X-CSRF-Token'] = sessionStorage.getItem('dash');
 
       const response = await fetch(`${this.apiURI}/totals`, {
         method: 'GET',
@@ -42,7 +42,7 @@ export const useDashboardStore = defineStore('useDashboardStore', {
     async getSales(data) {
 
       this.headers['Authorization'] = `Bearer ${sessionStorage.getItem('bearer')}`;
-      this.headers['X-CSRF-Token'] = sessionStorage.getItem('csrf');
+      this.headers['X-CSRF-Token'] = sessionStorage.getItem('dash');
 
       const response = await fetch(`${this.apiURI}/sales`, {
         method: 'POST',
@@ -64,7 +64,7 @@ export const useDashboardStore = defineStore('useDashboardStore', {
     async getPopularCategories() {
 
       this.headers['Authorization'] = `Bearer ${sessionStorage.getItem('bearer')}`;
-      // this.headers['X-CSRF-Token'] = sessionStorage.getItem('csrf');
+      // this.headers['X-CSRF-Token'] = sessionStorage.getItem('dash');
 
       const response = await fetch(`${this.apiURI}/categories/popular`, {
         method: 'GET',
@@ -85,7 +85,7 @@ export const useDashboardStore = defineStore('useDashboardStore', {
     async getOrders() {
 
       this.headers['Authorization'] = `Bearer ${sessionStorage.getItem('bearer')}`;
-      // this.headers['X-CSRF-Token'] = sessionStorage.getItem('csrf');
+      // this.headers['X-CSRF-Token'] = sessionStorage.getItem('dash');
 
       const response = await fetch(`${this.apiURI}/orders`, {
         method: 'GET',

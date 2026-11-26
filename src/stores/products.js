@@ -56,7 +56,7 @@ export const useProductsStore = defineStore('useProductsStore', {
     async getAllProducts() {
 
       this.headers['Authorization'] = `Bearer ${sessionStorage.getItem('bearer')}`;
-      // this.headers['X-CSRF-Token'] = sessionStorage.getItem('csrf');
+      // this.headers['X-CSRF-Token'] = sessionStorage.getItem('dash');
 
       const response = await fetch(`${this.apiURI}/products`, {
         method: 'GET',
@@ -76,7 +76,7 @@ export const useProductsStore = defineStore('useProductsStore', {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${sessionStorage.getItem('bearer')}`,
-          'X-CSRF-Token': sessionStorage.getItem('csrf')
+          'X-CSRF-Token': sessionStorage.getItem('dash')
         },
         credentials: 'include',
         body: data
@@ -96,7 +96,7 @@ export const useProductsStore = defineStore('useProductsStore', {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${sessionStorage.getItem('bearer')}`,
-          'X-CSRF-Token': sessionStorage.getItem('csrf')
+          'X-CSRF-Token': sessionStorage.getItem('dash')
         },
         credentials: 'include',
         body: data

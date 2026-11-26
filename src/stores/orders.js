@@ -77,7 +77,7 @@ export const useOrderStore = defineStore('useOrderStore', {
     async getAllOrders() {
 
       this.headers['Authorization'] = `Bearer ${sessionStorage.getItem('bearer')}`;
-      // this.headers['X-CSRF-Token'] = sessionStorage.getItem('csrf');
+      // this.headers['X-CSRF-Token'] = sessionStorage.getItem('dash');
 
       const response = await fetch(`${this.apiURI}/orders/all`, {
         method: 'GET',
@@ -98,7 +98,7 @@ export const useOrderStore = defineStore('useOrderStore', {
     async shipOrder(data) {
 
       this.headers['Authorization'] = `Bearer ${sessionStorage.getItem('bearer')}`;
-      this.headers['X-CSRF-Token'] = sessionStorage.getItem('csrf');
+      this.headers['X-CSRF-Token'] = sessionStorage.getItem('dash');
 
       const response = await fetch(`${this.apiURI}/orders/ship`, {
         method: 'PATCH',

@@ -115,7 +115,7 @@ export const useCategoriesStore = defineStore('useCategoriesStore', {
     async getAllCategories() {
 
       this.headers['Authorization'] = `Bearer ${sessionStorage.getItem('bearer')}`;
-      // this.headers['X-CSRF-Token'] = sessionStorage.getItem('csrf');
+      // this.headers['X-CSRF-Token'] = sessionStorage.getItem('dash');
 
       const response = await fetch(`${this.apiURI}/categories/all`, {
         method: 'GET',
@@ -132,7 +132,7 @@ export const useCategoriesStore = defineStore('useCategoriesStore', {
     async addCategory(data) {
 
       this.headers['Authorization'] = `Bearer ${sessionStorage.getItem('bearer')}`;
-      this.headers['X-CSRF-Token'] = sessionStorage.getItem('csrf');
+      this.headers['X-CSRF-Token'] = sessionStorage.getItem('dash');
 
       const response = await fetch(`${this.apiURI}/categories/add`, {
         method: 'POST',
@@ -152,7 +152,7 @@ export const useCategoriesStore = defineStore('useCategoriesStore', {
     async updateCategory(data) {
 
       this.headers['Authorization'] = `Bearer ${sessionStorage.getItem('bearer')}`;
-      this.headers['X-CSRF-Token'] = sessionStorage.getItem('csrf');
+      this.headers['X-CSRF-Token'] = sessionStorage.getItem('dash');
 
       const response = await fetch(`${this.apiURI}/categories/update`, {
         method: 'PATCH',
