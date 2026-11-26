@@ -1,10 +1,10 @@
 <script setup>
-import { onBeforeMount } from 'vue';
+import { onMounted } from 'vue';
 import { useAuthStore } from './stores/auth';
 
 const auth = useAuthStore();
 
-onBeforeMount(() => auth.loadCSRF());
+onMounted(() => auth.loadCSRF());
 </script>
 
 <template>
